@@ -3,6 +3,7 @@
 
 #include "piece.h"
 #include "coordinate.h"
+#include "memory.h"
 
 class Board {
     public:
