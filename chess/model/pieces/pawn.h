@@ -8,7 +8,7 @@ private:
     bool hasMoved;
     bool justMovedTwice;
 public:
-    Pawn(Coordinate position, Colour colour, PieceType pieceType, Board* board);
+    Pawn(Coordinate position, Colour colour, Board* board);
 
     virtual ~Pawn() = default;
 
