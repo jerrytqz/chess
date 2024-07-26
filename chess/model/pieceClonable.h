@@ -2,9 +2,11 @@
 
 template <typename T> class PieceClonable : public Piece {
 public:
-    T& clone() override {
-        return *new T{*static_cast<T*>(this)};
+    std::unique_ptr<T> clone() const override {
+        return std::make_unique<T>(*static_cast<T*>(this));
     }
 
     virtual ~PieceClonable() = 0;
+private:
+
 };

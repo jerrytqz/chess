@@ -18,4 +18,4 @@ bool Pawn::makeMove(Coordinate dest) {
 
 bool Pawn::canTargetSquare(Coordinate square) {
     // Implementation goes here
-};
+}

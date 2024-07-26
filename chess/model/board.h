@@ -21,7 +21,7 @@ class Board {
 
         void computeBoardState(Piece::Colour turn);
         BoardState getBoardState();
-        Piece& getPiece(Coordinate pos);
+        std::unique_ptr<Piece> getPiece(Coordinate pos);
         int getBoardDimension();
         bool takeTurn(Coordinate from, Coordinate to, Piece::Colour col);
         bool promote(Coordinate pos, Piece::PieceType pieceType, Piece::Colour col);
