@@ -19,30 +19,39 @@ Board::~Board() {
 
 // }
 
-Board::BoardState Board::getBoardState() {
+Board::BoardState Board::getBoardState() const {
     return boardState;
 }
 
-std::unique_ptr<Piece> Board::getPiece(Coordinate pos) {
+std::unique_ptr<Piece> Board::getPiece(Coordinate pos) const {
     return board[pos.row][pos.col]->clone();
 }
 
-// int Board::getBoardDimension() {
+int Board::getBoardDimension() const {
+    return boardDimension;
+}
 
-// }
-
-// bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
-
-// }
+bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
+    // Implement this function
+}
 
 // bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {
 
 // }
 
-// bool Board::addPiece(Coordinate pos, Piece* piece) {
+bool Board::addPiece(Coordinate pos, Piece* piece) {
+    if (nullptr == board[pos.row][pos.col]) {
+        board[pos.row][pos.col] = piece;
+        return true;
+    }
+    return false;
+}
 
-// }
-
-// bool Board::removePiece(Coordinate pos) {
-
-// }
+bool Board::removePiece(Coordinate pos) {
+    if (nullptr != board[pos.row][pos.col]) {
+        delete board[pos.row][pos.col];
+        board[pos.row][pos.col] = nullptr;
+        return true;
+    }
+    return false;
+}

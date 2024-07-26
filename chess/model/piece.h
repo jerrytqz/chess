@@ -25,7 +25,7 @@ public:
 
     std::unique_ptr<Piece> clone();
 
-    virtual PieceType getPieceType() const = 0;
+    PieceType getPieceType() const;
     virtual std::vector<Coordinate> getValidMoves() const = 0;
     virtual bool canTargetSquare(Coordinate square) const = 0;
     virtual bool makeMove(Coordinate dest) = 0;

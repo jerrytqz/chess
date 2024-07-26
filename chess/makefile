@@ -2,7 +2,7 @@ CXX=g++
 CXXFLAGS=-std=c++14 -Wall -pedantic -Wextra -Wno-sign-compare -MMD
 EXEC=chess
 
-DIRS=. model model/pieces view controller
+DIRS=. model model/pieces view controller shared
 
 CCFILES=$(wildcard $(addsuffix /*.cc, $(DIRS)))
 
