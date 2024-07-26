@@ -6,3 +6,7 @@ Piece::Piece(Coordinate position, Colour colour, PieceType pieceType, Board* boa
 std::unique_ptr<Piece> Piece::clone() {
     return std::unique_ptr<Piece>(cloneImpl());
 }
+
+Piece::PieceType Piece::getPieceType() const {
+    return pieceType;
+}

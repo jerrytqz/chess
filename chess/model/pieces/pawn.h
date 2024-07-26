@@ -12,7 +12,6 @@ public:
 
     virtual ~Pawn() = default;
 
-    virtual PieceType getPieceType() const override;
     virtual std::vector<Coordinate> getValidMoves() const override;
     virtual bool canTargetSquare(Coordinate square) const override;
     virtual bool makeMove(Coordinate dest) override;

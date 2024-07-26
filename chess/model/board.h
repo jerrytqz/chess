@@ -21,9 +21,9 @@ class Board {
         ~Board(); //DTOR
 
         void computeBoardState(Colour turn);
-        BoardState getBoardState();
-        std::unique_ptr<Piece> getPiece(Coordinate pos);
-        int getBoardDimension();
+        BoardState getBoardState() const;
+        std::unique_ptr<Piece> getPiece(Coordinate pos) const;
+        int getBoardDimension() const;
         bool takeTurn(Coordinate from, Coordinate to, Colour col);
         bool promote(Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(Coordinate pos, Piece* piece);
