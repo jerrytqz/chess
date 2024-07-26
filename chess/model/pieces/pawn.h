@@ -1,17 +1,15 @@
 #ifndef PAWN_H
 #define PAWN_H
 
-#include "../piece.h"
+#include "../pieceClonable.h"
 
-class Pawn : public Piece {
+class Pawn : public PieceClonable<Pawn> {
 private:
     bool hasMoved;
     bool justMovedTwice;
 public:
     Pawn(Coordinate position, Colour colour, PieceType pieceType, Board* board);
 
-
-    Pawn* clone() override;
     virtual ~Pawn() = default;
 
     virtual PieceType getPieceType() override;
