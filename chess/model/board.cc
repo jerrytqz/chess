@@ -1,4 +1,5 @@
 #include "board.h"
+#include "../shared/colour.h"
 
 Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
@@ -14,7 +15,7 @@ Board::~Board() {
     delete[] board;
 }
 
-// void Board::computeBoardState(Piece::Colour turn) {
+// void Board::computeBoardState(Colour turn) {
 
 // }
 
@@ -30,11 +31,11 @@ std::unique_ptr<Piece> Board::getPiece(Coordinate pos) {
 
 // }
 
-// bool Board::takeTurn(Coordinate from, Coordinate to, Piece::Colour col) {
+// bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
 
 // }
 
-// bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Piece::Colour col) {
+// bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {
 
 // }
 

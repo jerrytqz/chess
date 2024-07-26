@@ -1,6 +1,6 @@
 #include "pawn.h"
 
-Pawn::Pawn(Coordinate position, Piece::Colour colour, Board* board) 
+Pawn::Pawn(Coordinate position, Colour colour, Board* board) 
     : PieceClonable{position, colour, Piece::PieceType::Pawn, board}, hasMoved{false}, justMovedTwice{false} {}
 
 Piece::PieceType Pawn::getPieceType() const {
