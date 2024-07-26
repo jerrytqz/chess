@@ -3,17 +3,13 @@
 
 #include <vector>
 #include <memory>
-#include "coordinate.h"
+#include "../shared/colour.h"
+#include "../shared/coordinate.h"
 
 class Board;
 
 class Piece {
 public:
-    enum class Colour {
-        White,
-        Black
-    };
-
     enum class PieceType {
         King,
         Queen,

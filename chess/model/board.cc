@@ -18,9 +18,9 @@ Board::~Board() {
 
 // }
 
-// Board::BoardState Board::getBoardState() {
-
-// }
+Board::BoardState Board::getBoardState() {
+    return boardState;
+}
 
 std::unique_ptr<Piece> Board::getPiece(Coordinate pos) {
     return board[pos.row][pos.col]->clone();
