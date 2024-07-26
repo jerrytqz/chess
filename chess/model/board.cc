@@ -22,7 +22,7 @@ Board::~Board() {
 
 // }
 
-Piece* Board::getPiece(Coordinate pos) {
+std::unique_ptr<Piece> Board::getPiece(Coordinate pos) {
     return board[pos.row][pos.col]->clone();
 }
 

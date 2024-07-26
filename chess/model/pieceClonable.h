@@ -7,12 +7,11 @@ template <typename T> class PieceClonable : public Piece {
 public:
     using Piece::Piece;
 
-    Piece* clone() override {
+    virtual ~PieceClonable() = 0;
+protected:
+    Piece* cloneImpl() override {
         return new T{*static_cast<T*>(this)};
     }
-
-    virtual ~PieceClonable() = 0;
-private:
 };
 
 template <typename T> PieceClonable<T>::~PieceClonable() {}
