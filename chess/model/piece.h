@@ -34,9 +34,10 @@ public:
     virtual bool makeMove(Coordinate dest) = 0;
     virtual bool canTargetSquare(Coordinate square) = 0;
 private:
+    PieceType pieceType;
+protected:
     Coordinate position;
     Colour colour;
-    PieceType pieceType;
     Board* board;
 };
 
