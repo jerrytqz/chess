@@ -23,7 +23,6 @@ public:
         Pawn
     };
 
-    Piece() = delete;
     Piece(Coordinate position, Colour colour, PieceType pieceType, Board* board);
 
     virtual ~Piece() = default;

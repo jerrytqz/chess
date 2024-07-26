@@ -4,7 +4,7 @@ Pawn::Pawn(Coordinate position, Piece::Colour colour, Piece::PieceType pieceType
     : Piece{position, colour, pieceType, board}, hasMoved{false}, justMovedTwice{false} {}
 
 
-PieceType Pawn::getPieceType() {
+Piece::PieceType Pawn::getPieceType() {
     // Implementation goes here
 }
 
