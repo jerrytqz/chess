@@ -2,7 +2,6 @@
 #define PIECE_H
 
 #include <vector>
-#include <memory>
 #include "coordinate.h"
 
 class Board;
@@ -27,7 +26,7 @@ public:
 
     virtual ~Piece() = default;
 
-    virtual std::unique_ptr<Piece> clone() const = 0;
+    virtual Piece* clone() = 0;
 
     virtual PieceType getPieceType() = 0;
     virtual std::vector<Coordinate> getValidMoves() = 0;
