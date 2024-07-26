@@ -14,7 +14,7 @@ Board::~Board() {
     delete[] board;
 }
 
-// void Board::computeBoardState() {
+// void Board::computeBoardState(Piece::Colour turn) {
 
 // }
 
@@ -22,9 +22,9 @@ Board::~Board() {
 
 // }
 
-// Piece Board::getPiece() {
-
-// }
+Piece& Board::getPiece(Coordinate pos) {
+    return board[pos.row][pos.col]->clone();
+}
 
 // int Board::getBoardDimension() {
 

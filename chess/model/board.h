@@ -19,9 +19,9 @@ class Board {
         Board(int boardDimension); //CTOR
         ~Board(); //DTOR
 
-        void computeBoardState();
+        void computeBoardState(Piece::Colour turn);
         BoardState getBoardState();
-        Piece getPiece();
+        Piece& getPiece(Coordinate pos);
         int getBoardDimension();
         bool takeTurn(Coordinate from, Coordinate to, Piece::Colour col);
         bool promote(Coordinate pos, Piece::PieceType pieceType, Piece::Colour col);

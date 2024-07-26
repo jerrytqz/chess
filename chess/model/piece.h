@@ -2,8 +2,9 @@
 #define PIECE_H
 
 #include <vector>
-#include "board.h"
 #include "coordinate.h"
+
+class Board;
 
 class Piece {
 public:
@@ -21,9 +22,12 @@ public:
         Pawn
     };
 
-    Piece(Coordinate position, Colour colour, PieceType pieceType, Board* board) 
-        : position{position}, colour{colour}, pieceType{pieceType}, board{board} {}
+    Piece() = delete;
+    Piece(Coordinate position, Colour colour, PieceType pieceType, Board* board);
+
     virtual ~Piece() = default;
+
+    virtual Piece& clone() = 0;
 
     virtual PieceType getPieceType() = 0;
     virtual std::vector<Coordinate> getValidMoves() = 0;

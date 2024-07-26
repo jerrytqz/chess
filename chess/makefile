@@ -14,7 +14,7 @@ DEPENDS=$(CCFILES:.cc=.d)
 
 # Linking the executable
 ${EXEC}: ${OBJECTS}
-	${CXX} ${OBJECTS} -o ${EXEC} -lX11
+	${CXX} ${OBJECTS} -o ${EXEC}
 
 # Include the dependencies
 -include ${DEPENDS}
