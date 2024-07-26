@@ -15,10 +15,6 @@ Board::~Board() {
     delete[] board;
 }
 
-// void Board::computeBoardState(Colour turn) {
-
-// }
-
 Board::BoardState Board::getBoardState() const {
     return boardState;
 }
@@ -31,15 +27,40 @@ int Board::getBoardDimension() const {
     return boardDimension;
 }
 
+void Board::computeBoardState(Colour turn) {
+
+}
+
 bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
-    // Implement this function
+    Piece* piece = board[from.row][from.col];
+
+    // First stage of checks: is there a piece at the from coordinate and is it the correct colour?
+    if (nullptr == piece || piece->getColour() != col) {
+        return false;
+    }
+
+    // Second stage of checks: does the board state allow the move?
+    computeBoardState(col);
+    if (boardState == WhiteCheckmated || boardState == BlackCheckmated || boardState == Stalemate) {
+        return false;
+    }
+
+    // Third stage of checks: can the piece make the move?
+    if (piece->makeMove(to)) {
+        delete board[to.row][to.col];
+        board[to.row][to.col] = piece;
+        board[from.row][from.col] = nullptr;
+        return true;
+    }
+    return false;
 }
 
 // bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {
 
 // }
 
-bool Board::addPiece(Coordinate pos, Piece* piece) {
+bool Board::addPiece(Piece* piece) {
+    Coordinate pos = piece->getPosition();
     if (nullptr == board[pos.row][pos.col]) {
         board[pos.row][pos.col] = piece;
         return true;

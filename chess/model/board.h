@@ -26,7 +26,7 @@ class Board {
         int getBoardDimension() const;
         bool takeTurn(Coordinate from, Coordinate to, Colour col);
         bool promote(Coordinate pos, Piece::PieceType pieceType, Colour col);
-        bool addPiece(Coordinate pos, Piece* piece);
+        bool addPiece(Piece* piece);
         bool removePiece(Coordinate pos);
 
     protected:

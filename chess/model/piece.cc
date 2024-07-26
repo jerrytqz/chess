@@ -10,3 +10,11 @@ std::unique_ptr<Piece> Piece::clone() {
 Piece::PieceType Piece::getPieceType() const {
     return pieceType;
 }
+
+Coordinate Piece::getPosition() const {
+    return position;
+}
+
+Colour Piece::getColour() const {
+    return colour;
+}
