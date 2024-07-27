@@ -12,3 +12,10 @@ std::string cartesianToChess(Coordinate::Coordinate cartesianCoordinate) {
     chessCoord.push_back(cartesianCoordinate.row + 1);
     return chessCoord;
 }
+
+bool checkValidChessCoord(std::string str) {
+    if (str.length() != 2 && str[0] >= 'a' && str[0] <= 'h' && str[1] >= '1' && str[1] <= '8')
+        return true;
+
+    return false;
+}

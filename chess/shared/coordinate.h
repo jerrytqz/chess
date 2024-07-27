@@ -14,6 +14,7 @@ namespace Coordinate {
 
     std::string cartesianToChess(Coordinate cartesianCoordinate);
 
+    bool checkValidChess(std::string possibleChessCoordinate);
 }
 
 #endif
