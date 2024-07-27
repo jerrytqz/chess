@@ -8,6 +8,8 @@ class Piece;
 class Player;
 class Observer;
 
+int defaultBoardDimension = 8;
+
 class Game {
     public:
         struct GameState { //passed on to observers
@@ -36,10 +38,11 @@ class Game {
         Board* board;
         Player* whitePlayer;
         Player* blackPlayer;
-        float whiteScore;
-        float blackScore;
+        float whiteScore = 0;
+        float blackScore = 0;
         std::vector<Observer*> observers;
         Colour currentTurn;
+        bool gameHasStarted = false;
 };
 
 #endif

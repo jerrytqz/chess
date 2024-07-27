@@ -1,4 +1,7 @@
 #include "game.h"
+#include <iostream>
+#include "../shared/coordinate.h"
+#include "../model/pieces/pawn.h"
 
 Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer): board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {
     //no need for implementation
@@ -6,13 +9,88 @@ Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer): board{board}
 
 Game::~Game() {
     delete board;
-    delete whitePlayer; //REMEMBER TO DELETE PLAYERS DURING UPDATEPLAYER TOO
+    delete whitePlayer;
     delete blackPlayer;
 }
 
-// void Game::setUp() {
+bool isCapital(char c) { //setup helper
+    return (c >= 'A' && c <= 'Z');
+}
+Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board* board) { //setup helper
+    Colour colour = isCapital(pieceCode[0]) ? Colour::White : Colour::Black;
+    char lcPieceCode = pieceCode[0];
+    if (pieceCode[0] >= 'A') {
+        lcPieceCode = 'a' + (lcPieceCode - 'A');
+    }
 
-// }
+    if (lcPieceCode == 'r') { //rook
+
+    }
+    else if (lcPieceCode == 'n') { //knight
+
+    }
+    else if (lcPieceCode == 'b') { //bishop
+
+    }
+    else if (lcPieceCode == 'q') { //queen
+
+    }
+    else if (lcPieceCode == 'k') { //king
+
+    }
+    else if (lcPieceCode == 'p') { //pawn
+        return new Pawn{coords, colour, board};
+    }
+
+    return nullptr;
+}
+void Game::setUp() { //this method interfaces with std::cout
+    if (gameHasStarted) {
+        return;
+    }
+
+    //delete current board and initialize new board
+    if (board) {
+        delete board;
+    }
+    board = new Board{defaultBoardDimension};
+
+    //command handling
+    std::string command;
+    while (std::cin >> command) {
+        if (command == "+") { //add piece
+            std::string pieceCode;
+            std::string chessCoords;
+            std::cin >> pieceCode >> chessCoords;
+            board->addPiece(generatePiece(pieceCode, Coordinate::chessToCartesian(chessCoords), board));
+            notifyObservers(); //redisplay board
+        }
+        else if (command == "-") { //remove piece
+            std::string chessCoords;
+            std::cin >> chessCoords;
+            board->removePiece(Coordinate::chessToCartesian(chessCoords));
+            notifyObservers();
+        }
+        else if (command == "=") { //set turn
+            std::string colour;
+            std::cin >> colour;
+            if (colour == "black") {
+                currentTurn = Colour::Black;
+            }
+            else if (colour == "white") {
+                currentTurn = Colour::White;
+            }
+        }
+        else if (command == "done") {
+            if (board->verifyBoard(currentTurn)) {
+                return;
+            }
+            else {
+                std::cout << "Invalid board: unable to leave setup mode.\n";
+            }
+        }
+    }
+}
 
 // void Game::play() {
 
@@ -20,9 +98,15 @@ Game::~Game() {
 
 void Game::updatePlayer(Colour colour, Player* player) {
     if (colour == Colour::Black) {
+        if (blackPlayer) {
+            delete blackPlayer;
+        }
         blackPlayer = player;
     }
     else { //replace white player
+        if (whitePlayer) {
+            delete whitePlayer;
+        }
         whitePlayer = player;
     }
 }
@@ -52,6 +136,6 @@ Game::GameState Game::getGameState() {
     // };
 }
 
-// void Game::notifyObservers() {
+void Game::notifyObservers() {
 
-// }
+}

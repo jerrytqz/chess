@@ -61,11 +61,11 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
 bool Board::addPiece(Piece* piece) {
     Coordinate::Coordinate pos = piece->getPosition();
-    if (nullptr == board[pos.row][pos.col]) {
-        board[pos.row][pos.col] = piece;
-        return true;
+    if (nullptr != board[pos.row][pos.col]) {
+        delete board[pos.row][pos.col]; //delete existing piece
     }
-    return false;
+    board[pos.row][pos.col] = piece;
+    return true;
 }
 
 bool Board::removePiece(Coordinate::Coordinate pos) {
@@ -75,4 +75,39 @@ bool Board::removePiece(Coordinate::Coordinate pos) {
         return true;
     }
     return false;
+}
+
+bool Board::verifyBoard(Colour currentTurn) {
+    int numWhiteKing = 0, numBlackKing = 0;
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            if (board[i][j] != nullptr) {
+                if (board[i][j]->getPieceType() == Piece::PieceType::King) {
+                    //check if more than one white/black king
+                    if (board[i][j]->getColour() == Colour::Black && ++numBlackKing > 1) {
+                        return false;
+                    }
+                    else if (++numWhiteKing > 1) {
+                        return false;
+                    }
+                }
+                else if ((i == 0 || i == boardDimension - 1) && board[i][j]->getPieceType() == Piece::PieceType::Pawn) {
+                    //no pawn on the first or last ranks
+                    return false;
+                }
+            }
+        }
+    }
+    //exactly one white and one black king
+    if (numWhiteKing != 1 && numBlackKing != 1) {
+        return false;
+    }
+
+    //neither king is in check
+    computeBoardState(currentTurn);
+    if (boardState != BoardState::Default || boardState != BoardState::Stalemate) {
+        return false;
+    }
+
+    return true;
 }

@@ -28,6 +28,7 @@ class Board {
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(Piece* piece);
         bool removePiece(Coordinate::Coordinate pos);
+        bool verifyBoard(Colour currentTurn); //called by Game during setup
 
     protected:
 
