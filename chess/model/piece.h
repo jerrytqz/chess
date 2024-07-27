@@ -19,21 +19,21 @@ public:
         Pawn
     };
 
-    Piece(Coordinate position, Colour colour, PieceType pieceType, Board* board);
+    Piece(Coordinate::Coordinate position, Colour colour, PieceType pieceType, Board* board);
 
     virtual ~Piece() = default;
 
     std::unique_ptr<Piece> clone();
 
     PieceType getPieceType() const;
-    Coordinate getPosition() const;
+    Coordinate::Coordinate getPosition() const;
     Colour getColour() const;
     
-    virtual std::vector<Coordinate> getValidMoves() const = 0;
-    virtual bool canTargetSquare(Coordinate square) const = 0;
-    virtual bool makeMove(Coordinate dest) = 0;
+    virtual std::vector<Coordinate::Coordinate> getValidMoves() const = 0;
+    virtual bool canTargetSquare(Coordinate::Coordinate square) const = 0;
+    virtual bool makeMove(Coordinate::Coordinate dest) = 0;
 protected:
-    Coordinate position;
+    Coordinate::Coordinate position;
     Colour colour;
     Board* board;
 

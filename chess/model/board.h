@@ -22,12 +22,12 @@ class Board {
 
         void computeBoardState(Colour turn);
         BoardState getBoardState() const;
-        std::unique_ptr<Piece> getPiece(Coordinate pos) const;
+        std::unique_ptr<Piece> getPiece(Coordinate::Coordinate pos) const;
         int getBoardDimension() const;
-        bool takeTurn(Coordinate from, Coordinate to, Colour col);
-        bool promote(Coordinate pos, Piece::PieceType pieceType, Colour col);
+        bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
+        bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(Piece* piece);
-        bool removePiece(Coordinate pos);
+        bool removePiece(Coordinate::Coordinate pos);
 
     protected:
 

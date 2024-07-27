@@ -1,9 +1,19 @@
 #ifndef COORDINATE_H
 #define COORDINATE_H
 
-struct Coordinate {
-    int row;
-    int col;
-};
+#include<string>
+
+namespace Coordinate {
+
+    struct Coordinate {
+        int row;
+        int col;
+    };
+
+    Coordinate chessToCartesian(std::string chessCoordinate);
+
+    std::string cartesianToChess(Coordinate cartesianCoordinate);
+
+}
 
 #endif

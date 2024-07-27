@@ -5,7 +5,7 @@
 
 int main() {
     std::cout << "Hello world!" << std::endl;
-    Piece* pawn = new Pawn{Coordinate{0, 0}, Colour::White, nullptr};
+    Piece* pawn = new Pawn{Coordinate::Coordinate{0, 0}, Colour::White, nullptr};
     std::unique_ptr<Piece> pawnClone = pawn->clone();
     delete pawn;
     

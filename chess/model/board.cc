@@ -19,7 +19,7 @@ Board::BoardState Board::getBoardState() const {
     return boardState;
 }
 
-std::unique_ptr<Piece> Board::getPiece(Coordinate pos) const {
+std::unique_ptr<Piece> Board::getPiece(Coordinate::Coordinate pos) const {
     return board[pos.row][pos.col]->clone();
 }
 
@@ -31,7 +31,7 @@ void Board::computeBoardState(Colour turn) {
 
 }
 
-bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
+bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
     Piece* piece = board[from.row][from.col];
 
     // First stage of checks: is there a piece at the from coordinate and is it the correct colour?
@@ -60,7 +60,7 @@ bool Board::takeTurn(Coordinate from, Coordinate to, Colour col) {
 // }
 
 bool Board::addPiece(Piece* piece) {
-    Coordinate pos = piece->getPosition();
+    Coordinate::Coordinate pos = piece->getPosition();
     if (nullptr == board[pos.row][pos.col]) {
         board[pos.row][pos.col] = piece;
         return true;
@@ -68,7 +68,7 @@ bool Board::addPiece(Piece* piece) {
     return false;
 }
 
-bool Board::removePiece(Coordinate pos) {
+bool Board::removePiece(Coordinate::Coordinate pos) {
     if (nullptr != board[pos.row][pos.col]) {
         delete board[pos.row][pos.col];
         board[pos.row][pos.col] = nullptr;
