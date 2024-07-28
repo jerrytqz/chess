@@ -11,13 +11,13 @@ int main() {
         new HumanPlayer{board, Colour::Black}
     };
 
-    TextObserver* textObs = new TextObserver{&game};
+    Observer* textObs = new TextObserver{&game};
+
     game.notifyObservers();
-
     game.setUp();
-
     game.notifyObservers();
 
     delete textObs;
+    
     return 0;
 }

@@ -160,7 +160,6 @@ bool Board::addPiece(Piece* piece) {
 
     //check if piece is in bounds
     if (!Coordinate::checkBounds(pos, boardDimension)) {
-        delete piece;
         return false;
     }
 
@@ -183,7 +182,7 @@ bool Board::removePiece(Coordinate::Coordinate pos) {
     }
     return false;
 }
-#include <iostream>
+
 bool Board::verifyBoard(Colour currentTurn) {
     int numWhiteKing = 0, numBlackKing = 0;
     for (int i = 0; i < boardDimension; i++) {

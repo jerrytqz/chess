@@ -78,7 +78,10 @@ void Game::setUp() { //this method interfaces with std::cout
             if (pieceCode.length() != 1) {
                 continue;
             }
-            board->addPiece(generatePiece(pieceCode, Coordinate::chessToCartesian(chessCoords), board));
+            Piece* newPiece = generatePiece(pieceCode, Coordinate::chessToCartesian(chessCoords), board);
+            if (!board->addPiece(newPiece)) {
+                delete newPiece;
+            }
             notifyObservers(); //redisplay board
         }
         else if (command == "-") { //remove piece
@@ -151,17 +154,11 @@ void Game::updatePlayer(Colour colour, Player* player) {
 }
 
 void Game::detachObserver(Observer* obs) {
-    //find where observer is in list and delete it
-    for (auto it = observers.begin(); it != observers.end(); it++) {
-        if (*it == obs) {
-            observers.erase(it);
-            return;
-        }
-    }
+    observers.erase(std::remove(observers.begin(), observers.end(), obs), observers.end());
 }
 
 void Game::attachObserver(Observer* obs) {
-    observers.push_back(obs); //not our fault if observer is included more than once
+    observers.emplace_back(obs); //not our fault if observer is included more than once
 }
 
 Game::GameState Game::getGameState() {
@@ -176,7 +173,7 @@ Game::GameState Game::getGameState() {
 }
 
 void Game::notifyObservers() {
-    for (const auto it : observers) {
+    for (auto it : observers) {
         it->notify();
     }
 }

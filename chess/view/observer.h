@@ -5,12 +5,8 @@
 
 class Observer {
     public:
-        Observer(Game* game): game{game} {
-            game->attachObserver(this);
-        };
-        virtual ~Observer() {
-            game->detachObserver(this);
-        };
+        Observer(Game* game);
+        virtual ~Observer();
         virtual void notify() = 0;
 
     protected:
