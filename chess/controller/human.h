@@ -5,7 +5,6 @@
 #include "../shared/colour.h"
 #include "./player.h"
 class Board;
-class Piece;
 
 class HumanPlayer : Player {
     public:
