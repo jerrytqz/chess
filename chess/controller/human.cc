@@ -35,4 +35,6 @@ bool HumanPlayer::takeTurn() {
             std::cout << "Invalid action, try again" << std::endl;
         }
     }
+
+    return true;
 }
