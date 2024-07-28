@@ -13,7 +13,9 @@ class Game {
     public:
         class GameState { //passed on to observers
             public:
-                GameState(float whiteScore, float blackScore, Colour currentTurn, int boardDimension, std::unique_ptr<Piece>** board, Board::BoardState boardState);
+                GameState() = default; //only used on Game initialization (default CTOR)
+                GameState(float whiteScore, float blackScore, Colour currentTurn, int boardDimension, std::unique_ptr<Piece>** board, Board::BoardState boardState); //CTOR
+                GameState(const GameState& other) = default; //copy CTOR
                 ~GameState();
                 float whiteScore;
                 float blackScore;
@@ -45,6 +47,8 @@ class Game {
         std::vector<Observer*> observers;
         Colour currentTurn;
         bool gameInProgress = false;
+        GameState gameState;
+        void updateGameState();
 };
 
 #endif

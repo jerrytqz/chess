@@ -2,10 +2,10 @@
 #include <iostream>
 #include "../shared/coordinate.h"
 #include "../model/pieces/pawn.h"
+#include "../view/observer.h"
 
-Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer): board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {
-    //no need for implementation
-}
+Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
+    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer}, gameState{} {};
 
 Game::~Game() {
     delete board;
@@ -177,7 +177,11 @@ void Game::attachObserver(Observer* obs) {
 }
 
 Game::GameState Game::getGameState() {
-    return GameState {
+    return gameState;
+}
+
+void Game::updateGameState() {
+    gameState = GameState {
         whiteScore,
         blackScore,
         currentTurn,
@@ -188,5 +192,8 @@ Game::GameState Game::getGameState() {
 }
 
 void Game::notifyObservers() {
-
+    updateGameState();
+    for (const auto it : observers) {
+        it->notify();
+    }
 }
