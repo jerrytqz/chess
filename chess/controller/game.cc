@@ -2,7 +2,7 @@
 #include <iostream>
 #include <memory>
 #include "../shared/coordinate.h"
-#include "../model/pieces/pawn.h"
+#include "../model/board.h"
 #include "../view/observer.h"
 
 Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
@@ -36,22 +36,22 @@ Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board
     }
 
     if (lcPieceCode == 'r') { //rook
-
+        return Board::initializePiece(coords, colour, Piece::PieceType::Rook, board);
     }
     else if (lcPieceCode == 'n') { //knight
-
+        return Board::initializePiece(coords, colour, Piece::PieceType::Knight, board);
     }
     else if (lcPieceCode == 'b') { //bishop
-
+        return Board::initializePiece(coords, colour, Piece::PieceType::Bishop, board);
     }
     else if (lcPieceCode == 'q') { //queen
-
+        return Board::initializePiece(coords, colour, Piece::PieceType::Queen, board);
     }
     else if (lcPieceCode == 'k') { //king
-
+        return Board::initializePiece(coords, colour, Piece::PieceType::King, board);
     }
     else if (lcPieceCode == 'p') { //pawn
-        return new Pawn{coords, colour, board};
+        return Board::initializePiece(coords, colour, Piece::PieceType::Pawn, board);
     }
 
     return nullptr;

@@ -1,15 +1,75 @@
 #include "board.h"
+#include "./pieces/pawn.h"
+#include "./pieces/rook.h"
+#include "./pieces/knight.h"
+#include "./pieces/bishop.h"
+#include "./pieces/queen.h"
+#include "./pieces/king.h"
 #include "../shared/colour.h"
+
+Piece* Board::initializePiece(Coordinate::Coordinate coords, Colour colour, Piece::PieceType type, Board* board) {
+    Piece* newPiece;
+    switch (type) {
+        case Piece::PieceType::Pawn:
+            newPiece = new Pawn{coords, colour, board};
+            break;   
+        case Piece::PieceType::Rook:
+            newPiece = new Rook{coords, colour, board};
+            break;
+        case Piece::PieceType::Knight:
+            newPiece = new Knight{coords, colour, board};
+            break;
+        case Piece::PieceType::Bishop:
+            newPiece = new Bishop{coords, colour, board};
+            break;
+        case Piece::PieceType::Queen:
+            newPiece = new Queen{coords, colour, board};
+            break;
+        case Piece::PieceType::King:
+            newPiece = new King{coords, colour, board};
+            break;
+    }
+    return newPiece;
+}
 
 Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
     for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
         board[i] = new Piece*[boardDimension]{0};
     }
+
+    //if board dimension is 8 initialize with default chessboard
+    if (boardDimension == 8) {
+        for (int j = 0; j < 8; j++) { //pawns
+            board[1][j] = new Pawn{Coordinate::Coordinate{1, j}, Colour::White, this};
+            board[6][j] = new Pawn{Coordinate::Coordinate{6, j}, Colour::Black, this};
+        }
+
+        const std::vector<Piece::PieceType> pieceOrder = {
+            Piece::PieceType::Rook, Piece::PieceType::Knight, Piece::PieceType::Bishop, Piece::PieceType::Queen, Piece::PieceType::King
+        };
+
+        for (int j = 0; j < pieceOrder.size(); j++) {
+            //initialize white pieces
+            board[0][j] = initializePiece(Coordinate::Coordinate{0, j}, Colour::White, pieceOrder[j], this);
+            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
+                board[0][7 - j] = initializePiece(Coordinate::Coordinate{0, 7 - j}, Colour::White, pieceOrder[j], this);
+            }
+
+            //initialize black pieces
+            board[7][j] = initializePiece(Coordinate::Coordinate{7, j}, Colour::Black, pieceOrder[j], this);
+            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
+                board[7][7 - j] = initializePiece(Coordinate::Coordinate{7, 7 - j}, Colour::Black, pieceOrder[j], this);
+            }
+        }
+    }
 }
 
 Board::~Board() {
     for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            delete board[i][j];
+        }
         delete[] board[i];
     }
     delete[] board;

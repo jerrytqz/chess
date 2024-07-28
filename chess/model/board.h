@@ -30,6 +30,7 @@ class Board {
         bool addPiece(Piece* piece);
         bool removePiece(Coordinate::Coordinate pos);
         bool verifyBoard(Colour currentTurn); //called by Game during setup
+        static Piece* initializePiece(Coordinate::Coordinate coords, Colour colour, Piece::PieceType type, Board* board);
 
     protected:
 
