@@ -39,20 +39,25 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
         return false;
     }
 
-    // Second stage of checks: does the board state allow the move?
+    // Second stage of checks: does the board state allow moving?
     computeBoardState(col);
     if (boardState == WhiteCheckmated || boardState == BlackCheckmated || boardState == Stalemate) {
         return false;
     }
 
     // Third stage of checks: can the piece make the move?
-    if (piece->makeMove(to)) {
-        delete board[to.row][to.col];
-        board[to.row][to.col] = piece;
-        board[from.row][from.col] = nullptr;
-        return true;
+    bool moved = piece->makeMove(to);
+    if (!moved) {
+        return false;
     }
-    return false;
+
+    // Fourth stage of checks: is the board state still valid after the move?
+    computeBoardState(col);
+    if (col == Colour::White && boardState == WhiteChecked || col == Colour::Black && boardState == BlackChecked) {
+        return false;
+    }
+
+    return true;
 }
 
 // bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {

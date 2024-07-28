@@ -92,9 +92,42 @@ void Game::setUp() { //this method interfaces with std::cout
     }
 }
 
-// void Game::play() {
+void Game::play() {
+    while (true) {
+        if (currentTurn == Colour::White) {
+            if (!whitePlayer->takeTurn()) {
+                std::cout << "White resigns. Black wins.\n";
+                return;
+            }
+        } else {
+            if (!blackPlayer->takeTurn()) {
+                std::cout << "Black resigns. White wins.\n";
+                return;
+            }
+        }
 
-// }
+        if (board->getBoardState() == Board::BoardState::WhiteChecked) {
+            std::cout << "White is in check.\n";
+        }
+        else if (board->getBoardState() == Board::BoardState::BlackChecked) {
+            std::cout << "Black is in check.\n";
+        }
+        else if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
+            std::cout << "White is checkmated. Black wins.\n";
+            return;
+        }
+        else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
+            std::cout << "Black is checkmated. White wins.\n";
+            return;
+        }
+        else if (board->getBoardState() == Board::BoardState::Stalemate) {
+            std::cout << "Stalemate.\n";
+            return;
+        }
+        
+        notifyObservers();
+    }
+}
 
 void Game::updatePlayer(Colour colour, Player* player) {
     if (colour == Colour::Black) {

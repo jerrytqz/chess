@@ -7,7 +7,7 @@
 
 HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {}
 
-void HumanPlayer::takeTurn() {
+bool HumanPlayer::takeTurn() {
     std::string action;
     std::cin >> action;
 
@@ -26,13 +26,13 @@ void HumanPlayer::takeTurn() {
             board->takeTurn(Coordinate::chessToCartesian(from), Coordinate::chessToCartesian(to), colour);
 
             validMoveMade = true;
+            return true;
         }
         else if (action == "resign") {
-            // TODO: Implement later
+            return false;
         }
         else {
             std::cout << "Invalid action, try again" << std::endl;
-            continue;
         }
     }
 }

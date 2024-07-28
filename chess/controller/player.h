@@ -10,7 +10,7 @@ class Player {
     public:
         virtual ~Player() = default; //DTOR
 
-        virtual void takeTurn() = 0;
+        virtual bool takeTurn() = 0;
 
     protected:
 
