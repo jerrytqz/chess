@@ -5,9 +5,9 @@
 #include "../shared/colour.h"
 #include "../shared/coordinate.h"
 
-HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {}
+HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {};
 
-void HumanPlayer::takeTurn() {
+bool HumanPlayer::takeTurn() {
     std::string action;
     std::cin >> action;
 
@@ -28,11 +28,13 @@ void HumanPlayer::takeTurn() {
             validMoveMade = true;
         }
         else if (action == "resign") {
-            // TODO: Implement later
+            return false;
         }
         else {
             std::cout << "Invalid action, try again" << std::endl;
             continue;
         }
     }
-}
+
+    return true;
+};
