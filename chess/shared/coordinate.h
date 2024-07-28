@@ -14,13 +14,13 @@ namespace Coordinate {
         }
     };
 
+    bool checkValidChess(std::string possibleChessCoordinate);
+    bool checkBounds(Coordinate coord, int dimension);
+
     Coordinate chessToCartesian(std::string chessCoordinate);
 
     std::string cartesianToChess(Coordinate cartesianCoordinate);
 
-    bool checkValidChess(std::string possibleChessCoordinate);
-
-    bool checkBounds(Coordinate coord, int dimension);
 }
 
 #endif

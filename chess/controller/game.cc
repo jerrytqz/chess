@@ -31,7 +31,7 @@ bool isCapital(char c) { //setup helper
 Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board* board) { //setup helper
     Colour colour = isCapital(pieceCode[0]) ? Colour::White : Colour::Black;
     char lcPieceCode = pieceCode[0];
-    if (pieceCode[0] >= 'A') {
+    if (lcPieceCode >= 'A' && lcPieceCode <= 'Z') {
         lcPieceCode = 'a' + (lcPieceCode - 'A');
     }
 
@@ -75,6 +75,9 @@ void Game::setUp() { //this method interfaces with std::cout
             std::string pieceCode;
             std::string chessCoords;
             std::cin >> pieceCode >> chessCoords;
+            if (pieceCode.length() != 1) {
+                continue;
+            }
             board->addPiece(generatePiece(pieceCode, Coordinate::chessToCartesian(chessCoords), board));
             notifyObservers(); //redisplay board
         }

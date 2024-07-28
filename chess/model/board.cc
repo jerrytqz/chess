@@ -106,7 +106,8 @@ std::unique_ptr<Piece>** Board::cloneBoard() {
 }
 
 void Board::computeBoardState(Colour turn) {
-
+    //IMPLEMENTATION NOT DONE
+    boardState = BoardState::Default;
 }
 
 bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
@@ -156,6 +157,13 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 bool Board::addPiece(Piece* piece) {
     if (nullptr == piece) return false;
     Coordinate::Coordinate pos = piece->getPosition();
+
+    //check if piece is in bounds
+    if (!Coordinate::checkBounds(pos, boardDimension)) {
+        delete piece;
+        return false;
+    }
+
     if (nullptr != board[pos.row][pos.col]) {
         delete board[pos.row][pos.col]; //delete existing piece
     }
@@ -164,6 +172,10 @@ bool Board::addPiece(Piece* piece) {
 }
 
 bool Board::removePiece(Coordinate::Coordinate pos) {
+    if (!Coordinate::checkBounds(pos, boardDimension)) {
+        return false;
+    }
+
     if (nullptr != board[pos.row][pos.col]) {
         delete board[pos.row][pos.col];
         board[pos.row][pos.col] = nullptr;
@@ -171,7 +183,7 @@ bool Board::removePiece(Coordinate::Coordinate pos) {
     }
     return false;
 }
-
+#include <iostream>
 bool Board::verifyBoard(Colour currentTurn) {
     int numWhiteKing = 0, numBlackKing = 0;
     for (int i = 0; i < boardDimension; i++) {
@@ -182,7 +194,7 @@ bool Board::verifyBoard(Colour currentTurn) {
                     if (board[i][j]->getColour() == Colour::Black && ++numBlackKing > 1) {
                         return false;
                     }
-                    else if (++numWhiteKing > 1) {
+                    else if (board[i][j]->getColour() == Colour::White && ++numWhiteKing > 1) {
                         return false;
                     }
                 }
@@ -194,13 +206,13 @@ bool Board::verifyBoard(Colour currentTurn) {
         }
     }
     //exactly one white and one black king
-    if (numWhiteKing != 1 && numBlackKing != 1) {
+    if (numWhiteKing != 1 || numBlackKing != 1) {
         return false;
     }
 
     //neither king is in check
     computeBoardState(currentTurn);
-    if (boardState != BoardState::Default || boardState != BoardState::Stalemate) {
+    if (boardState != BoardState::Default && boardState != BoardState::Stalemate) {
         return false;
     }
 
