@@ -57,7 +57,7 @@ Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board
 }
 
 void Game::setUp() { //this method interfaces with std::cout
-    if (gameHasStarted) {
+    if (gameInProgress) {
         return;
     }
 
@@ -65,7 +65,7 @@ void Game::setUp() { //this method interfaces with std::cout
     if (board) {
         delete board;
     }
-    board = new Board{defaultBoardDimension};
+    board = new Board{8};
 
     //command handling
     std::string command;
@@ -105,15 +105,18 @@ void Game::setUp() { //this method interfaces with std::cout
 }
 
 void Game::play() {
+    gameInProgress = true;
     while (true) {
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
-                std::cout << "White resigns. Black wins.\n";
+                std::cout << "Black wins!\n";
+                gameInProgress = false;
                 return;
             }
         } else {
             if (!blackPlayer->takeTurn()) {
-                std::cout << "Black resigns. White wins.\n";
+                std::cout << "White wins!\n";
+                gameInProgress = false;
                 return;
             }
         }
@@ -125,15 +128,18 @@ void Game::play() {
             std::cout << "Black is in check.\n";
         }
         else if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
-            std::cout << "White is checkmated. Black wins.\n";
+            std::cout << "Checkmate! Black wins!\n";
+            gameInProgress = false;
             return;
         }
         else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
-            std::cout << "Black is checkmated. White wins.\n";
+            std::cout << "Checkmate! White wins!\n";
+            gameInProgress = false;
             return;
         }
         else if (board->getBoardState() == Board::BoardState::Stalemate) {
-            std::cout << "Stalemate.\n";
+            std::cout << "Stalemate!\n";
+            gameInProgress = false;
             return;
         }
         

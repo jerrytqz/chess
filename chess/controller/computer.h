@@ -6,7 +6,7 @@
 #include "./player.h"
 class Board;
 
-class ComputerPlayer : Player {
+class ComputerPlayer : public Player {
     public:
         ComputerPlayer(Board* board, Colour colour, int level);
         ~ComputerPlayer(); //DTOR

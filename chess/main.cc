@@ -1,13 +1,16 @@
-#include "model/pieces/pawn.h"
-#include "shared/colour.h"
-
-#include <iostream>
+#include "controller/game.h"
+#include "model/board.h"
+#include "controller/human.h"
 
 int main() {
-    std::cout << "Hello world!" << std::endl;
-    Piece* pawn = new Pawn{Coordinate::Coordinate{0, 0}, Colour::White, nullptr};
-    std::unique_ptr<Piece> pawnClone = pawn->clone();
-    delete pawn;
-    
+    Board* board = new Board{8};
+    Game game{
+        board, 
+        new HumanPlayer{board, Colour::White}, 
+        new HumanPlayer{board, Colour::Black}
+    };
+
+    game.setUp();
+
     return 0;
 }

@@ -9,8 +9,6 @@
 class Piece;
 class Observer;
 
-int defaultBoardDimension = 8;
-
 class Game {
     public:
         class GameState { //passed on to observers
@@ -46,7 +44,7 @@ class Game {
         float blackScore = 0;
         std::vector<Observer*> observers;
         Colour currentTurn;
-        bool gameHasStarted = false;
+        bool gameInProgress = false;
 };
 
 #endif

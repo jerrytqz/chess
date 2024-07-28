@@ -6,7 +6,7 @@
 #include "./player.h"
 class Board;
 
-class HumanPlayer : Player {
+class HumanPlayer : public Player {
     public:
         HumanPlayer(Board* board, Colour colour);
         ~HumanPlayer() = default; //DTOR
