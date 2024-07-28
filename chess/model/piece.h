@@ -27,6 +27,7 @@ public:
     std::unique_ptr<Piece> clone();
 
     PieceType getPieceType() const;
+    virtual char toChar() const = 0;
     Coordinate::Coordinate getPosition() const;
     Colour getColour() const;
     
