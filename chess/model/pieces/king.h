@@ -8,10 +8,11 @@ class King : public PieceClonable<King> {
 private:
     bool hasMoved;
 public:
+    static const char SYMBOL = 'K';
+
     King(Coordinate::Coordinate position, Colour colour, Board* board);
 
     virtual ~King() = default;
-    char toChar() const override final;
 
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
     virtual bool canTargetSquare(Coordinate::Coordinate square) const override;

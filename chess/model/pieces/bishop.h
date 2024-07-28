@@ -8,10 +8,11 @@ class Bishop : public PieceClonable<Bishop> {
 private:
 
 public:
+    static const char SYMBOL = 'B';
+
     Bishop(Coordinate::Coordinate position, Colour colour, Board* board);
 
     virtual ~Bishop() = default;
-    char toChar() const override final;
 
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
     virtual bool canTargetSquare(Coordinate::Coordinate square) const override;

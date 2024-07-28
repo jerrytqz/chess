@@ -5,15 +5,6 @@
 Pawn::Pawn(Coordinate::Coordinate position, Colour colour, Board* board) 
     : PieceClonable{position, colour, Piece::PieceType::Pawn, board}, hasMoved{false}, justMovedTwice{false} {}
 
-char Pawn::toChar() const {
-    if (colour == Colour::Black) {
-        return 'p';
-    }
-    else {
-        return 'P';
-    }
-}
-
 std::vector<Coordinate::Coordinate> Pawn::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 

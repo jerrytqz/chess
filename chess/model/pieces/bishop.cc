@@ -3,15 +3,6 @@
 Bishop::Bishop(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Bishop, board} {}
 
-char Bishop::toChar() const {
-    if (colour == Colour::Black) {
-        return 'b';
-    }
-    else {
-        return 'B';
-    }
-}
-
 std::vector<Coordinate::Coordinate> Bishop::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 

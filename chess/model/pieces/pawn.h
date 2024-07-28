@@ -9,10 +9,11 @@ private:
     bool hasMoved;
     bool justMovedTwice;
 public:
+    static const char SYMBOL = 'P';
+
     Pawn(Coordinate::Coordinate position, Colour colour, Board* board);
 
     virtual ~Pawn() = default;
-    char toChar() const override final;
 
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
     virtual bool canTargetSquare(Coordinate::Coordinate square) const override;

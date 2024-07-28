@@ -3,15 +3,6 @@
 Knight::Knight(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Knight, board} {}
 
-char Knight::toChar() const {
-    if (colour == Colour::Black) {
-        return 'n';
-    }
-    else {
-        return 'N';
-    }
-}
-
 std::vector<Coordinate::Coordinate> Knight::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 

@@ -3,15 +3,6 @@
 King::King(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::King, board}, hasMoved{false} {}
 
-char King::toChar() const {
-    if (colour == Colour::Black) {
-        return 'k';
-    }
-    else {
-        return 'K';
-    }
-}
-
 std::vector<Coordinate::Coordinate> King::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 

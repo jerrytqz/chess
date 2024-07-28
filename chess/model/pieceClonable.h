@@ -2,10 +2,19 @@
 #define PIECECLONABLE_H
 
 #include "piece.h"
+#include <cctype>
 
 template <typename T> class PieceClonable : public Piece {
 public:
     using Piece::Piece;
+
+    char toChar() const override {
+        if (colour == Colour::White) {
+            return T::SYMBOL;
+        } else {
+            return tolower(T::SYMBOL);
+        }
+    }
 
     virtual ~PieceClonable() = 0;
 protected:
