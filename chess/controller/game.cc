@@ -6,7 +6,7 @@
 #include "../view/observer.h"
 
 Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
-    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {}
+    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer}, currentTurn{Colour::White} {}
 
 Game::~Game() {
     delete board;
@@ -34,6 +34,7 @@ void Game::setUp() { //this method interfaces with std::cout
         delete board;
     }
     board = new Board{8};
+    notifyObservers();
 
     //command handling
     std::string command;
@@ -69,6 +70,7 @@ void Game::setUp() { //this method interfaces with std::cout
         }
         else if (command == "done") {
             if (board->verifyBoard(currentTurn)) {
+                notifyObservers();
                 return;
             }
             else {
@@ -82,28 +84,39 @@ void Game::setUp() { //this method interfaces with std::cout
 
 void Game::play() {
     gameInProgress = true;
-    while (true) {
+    while (gameInProgress) {
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
+                ++blackScore;
                 std::cout << "Black wins!\n";
                 gameInProgress = false;
+                notifyObservers();
                 return;
             }
         } else {
             if (!blackPlayer->takeTurn()) {
+                ++whiteScore;
                 std::cout << "White wins!\n";
                 gameInProgress = false;
+                notifyObservers();
                 return;
             }
-        }   
-        notifyObservers();
-
-        if (board->getBoardState() == Board::BoardState::WhiteCheckmated 
-            || board->getBoardState() == Board::BoardState::BlackCheckmated 
-            || board->getBoardState() == Board::BoardState::Stalemate) {
-            gameInProgress = false;
-            return;
         }
+
+        if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
+            ++blackScore;
+            gameInProgress = false;
+        } else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
+            ++whiteScore;
+            gameInProgress = false;
+        } else if (board->getBoardState() == Board::BoardState::Stalemate) {
+            whiteScore += 0.5;
+            blackScore += 0.5;
+            gameInProgress = false;
+        }
+
+        currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
+        notifyObservers();
     }
 }
 

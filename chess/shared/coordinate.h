@@ -2,6 +2,7 @@
 #define COORDINATE_H
 
 #include <string>
+#include <iostream>
 
 namespace Coordinate {
     // NOTE: Origin for coordinates is the bottom left corner of the board
@@ -20,7 +21,8 @@ namespace Coordinate {
     Coordinate chessToCartesian(std::string chessCoordinate);
 
     std::string cartesianToChess(Coordinate cartesianCoordinate);
-
 }
+
+std::ostream& operator<<(std::ostream& os, const Coordinate::Coordinate& coord);
 
 #endif

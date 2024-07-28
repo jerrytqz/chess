@@ -13,9 +13,8 @@ int main() {
 
     Observer* textObs = new TextObserver{&game};
 
-    game.notifyObservers();
     game.setUp();
-    game.notifyObservers();
+    game.play();
 
     delete textObs;
     

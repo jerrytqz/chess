@@ -1,5 +1,10 @@
 #include "coordinate.h"
 
+std::ostream& operator<<(std::ostream& os, const Coordinate::Coordinate& coord) {
+    os << "(" << coord.row << ", " << coord.col << ")";
+    return os;
+}
+
 Coordinate::Coordinate Coordinate::chessToCartesian(std::string chessCoordinate) {
     if (!checkValidChess(chessCoordinate)) { //not valid chess coordinate
         return Coordinate{-1, -1};

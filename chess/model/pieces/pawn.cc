@@ -16,7 +16,7 @@ std::vector<Coordinate::Coordinate> Pawn::getValidMoves() const {
     Coordinate::Coordinate c3{position.row + oneOffset, position.col + oneOffset}; // Diagonal right
     Coordinate::Coordinate c4{position.row + oneOffset, position.col - oneOffset}; // Diagonal left
 
-    if (!hasMoved && Coordinate::checkBounds(c2, board->getBoardDimension()) 
+    if (!hasMoved && Coordinate::checkBounds(c2, board->getBoardDimension()) && Coordinate::checkBounds(c1, board->getBoardDimension())
         && !board->getPiece(c2) && !board->getPiece(c1)) {
         validMoves.push_back(c2);
     }

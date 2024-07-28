@@ -57,6 +57,9 @@ Board::BoardState Board::getBoardState() const {
 }
 
 std::unique_ptr<Piece> Board::getPiece(Coordinate::Coordinate pos) const {
+    if (nullptr == board[pos.row][pos.col]) {
+        return nullptr;
+    }
     return board[pos.row][pos.col]->clone();
 }
 
