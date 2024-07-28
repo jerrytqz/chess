@@ -24,6 +24,7 @@ class Board {
         BoardState getBoardState() const;
         std::unique_ptr<Piece> getPiece(Coordinate::Coordinate pos) const;
         int getBoardDimension() const;
+        std::unique_ptr<Piece>** cloneBoard();
         bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(Piece* piece);

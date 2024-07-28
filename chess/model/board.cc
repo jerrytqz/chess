@@ -3,8 +3,8 @@
 
 Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
-    for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows)
-        board[i] = new Piece*[boardDimension];
+    for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
+        board[i] = new Piece*[boardDimension]{0};
     }
 }
 
@@ -25,6 +25,24 @@ std::unique_ptr<Piece> Board::getPiece(Coordinate::Coordinate pos) const {
 
 int Board::getBoardDimension() const {
     return boardDimension;
+}
+
+std::unique_ptr<Piece>** Board::cloneBoard() {
+    std::unique_ptr<Piece>** clonedBoard = new std::unique_ptr<Piece>*[boardDimension];
+    for (int i = 0; i < boardDimension; i++) {
+        clonedBoard[i] = new std::unique_ptr<Piece>[boardDimension]{0};
+    }
+
+    //populate cloned array
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            if (board[i][j] != nullptr) { //piece exists
+                clonedBoard[i][j] = board[i][j]->clone();
+            }
+        }
+    }
+
+    return clonedBoard;
 }
 
 void Board::computeBoardState(Colour turn) {

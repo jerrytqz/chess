@@ -13,13 +13,16 @@ int defaultBoardDimension = 8;
 
 class Game {
     public:
-        struct GameState { //passed on to observers
-            float whiteScore;
-            float blackScore;
-            Colour currentTurn;
-            int boardDimension;
-            Piece*** board;
-            Board::BoardState boardState;
+        class GameState { //passed on to observers
+            public:
+                GameState(float whiteScore, float blackScore, Colour currentTurn, int boardDimension, std::unique_ptr<Piece>** board, Board::BoardState boardState);
+                ~GameState();
+                float whiteScore;
+                float blackScore;
+                Colour currentTurn;
+                int boardDimension;
+                std::unique_ptr<Piece>** board;
+                Board::BoardState boardState;
         };
 
         Game(Board* board, Player* whitePlayer, Player* blackPlayer); //CTOR

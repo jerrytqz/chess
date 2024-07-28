@@ -13,6 +13,16 @@ Game::~Game() {
     delete blackPlayer;
 }
 
+Game::GameState::GameState(float whiteScore, float blackScore, Colour currentTurn, int boardDimension, std::unique_ptr<Piece>** board, Board::BoardState boardState):
+    whiteScore{whiteScore}, blackScore{blackScore}, currentTurn{currentTurn}, boardDimension{boardDimension}, board{board}, boardState{boardState} {};
+
+Game::GameState::~GameState() {
+    for (int i = 0; i < boardDimension; i++) {
+        delete[] board[i];
+    }
+    delete board;
+}
+
 bool isCapital(char c) { //setup helper
     return (c >= 'A' && c <= 'Z');
 }
@@ -159,14 +169,14 @@ void Game::attachObserver(Observer* obs) {
 }
 
 Game::GameState Game::getGameState() {
-    // return GameState {
-    //     whiteScore,
-    //     blackScore,
-    //     currentTurn,
-    //     board->getBoardDimension(),
-
-    //     board->getBoardState(),
-    // };
+    return GameState {
+        whiteScore,
+        blackScore,
+        currentTurn,
+        board->getBoardDimension(),
+        board->cloneBoard(),
+        board->getBoardState(),
+    };
 }
 
 void Game::notifyObservers() {
