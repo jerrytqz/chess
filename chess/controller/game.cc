@@ -26,6 +26,7 @@ Game::GameState::~GameState() {
 bool isCapital(char c) { //setup helper
     return (c >= 'A' && c <= 'Z');
 }
+
 Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board* board) { //setup helper
     Colour colour = isCapital(pieceCode[0]) ? Colour::White : Colour::Black;
     char lcPieceCode = pieceCode[0];
@@ -54,6 +55,7 @@ Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board
 
     return nullptr;
 }
+
 void Game::setUp() { //this method interfaces with std::cout
     if (gameHasStarted) {
         return;
