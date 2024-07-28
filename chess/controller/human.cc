@@ -5,7 +5,7 @@
 #include "../shared/colour.h"
 #include "../shared/coordinate.h"
 
-HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {};
+HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {}
 
 void HumanPlayer::takeTurn() {
     std::string action;
@@ -35,4 +35,4 @@ void HumanPlayer::takeTurn() {
             continue;
         }
     }
-};
+}
