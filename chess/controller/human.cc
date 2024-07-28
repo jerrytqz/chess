@@ -21,8 +21,11 @@ bool HumanPlayer::takeTurn() {
                 continue;
             }
 
-            board->takeTurn(Coordinate::chessToCartesian(from), Coordinate::chessToCartesian(to), colour);
-
+            if (!board->takeTurn(Coordinate::chessToCartesian(from), Coordinate::chessToCartesian(to), colour)) {
+                std::cout << "Invalid move, try again" << std::endl;
+                continue;
+            }
+            
             return true;
         }
         else if (action == "resign") {

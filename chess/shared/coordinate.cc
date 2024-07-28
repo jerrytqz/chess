@@ -2,7 +2,7 @@
 
 Coordinate::Coordinate Coordinate::chessToCartesian(std::string chessCoordinate) {
     int col = chessCoordinate[0] - 'a';
-    int row = chessCoordinate[1] - 1;
+    int row = chessCoordinate[1] - '1';
     return Coordinate{row, col};
 }
 

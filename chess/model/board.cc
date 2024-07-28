@@ -94,6 +94,7 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 // }
 
 bool Board::addPiece(Piece* piece) {
+    if (nullptr == piece) return false;
     Coordinate::Coordinate pos = piece->getPosition();
     if (nullptr != board[pos.row][pos.col]) {
         delete board[pos.row][pos.col]; //delete existing piece
