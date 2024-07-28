@@ -6,7 +6,7 @@
 #include "../view/observer.h"
 
 Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
-    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {};
+    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {}
 
 Game::~Game() {
     delete board;
@@ -120,31 +120,15 @@ void Game::play() {
                 gameInProgress = false;
                 return;
             }
-        }
-
-        if (board->getBoardState() == Board::BoardState::WhiteChecked) {
-            std::cout << "White is in check.\n";
-        }
-        else if (board->getBoardState() == Board::BoardState::BlackChecked) {
-            std::cout << "Black is in check.\n";
-        }
-        else if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
-            std::cout << "Checkmate! Black wins!\n";
-            gameInProgress = false;
-            return;
-        }
-        else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
-            std::cout << "Checkmate! White wins!\n";
-            gameInProgress = false;
-            return;
-        }
-        else if (board->getBoardState() == Board::BoardState::Stalemate) {
-            std::cout << "Stalemate!\n";
-            gameInProgress = false;
-            return;
-        }
-        
+        }   
         notifyObservers();
+
+        if (board->getBoardState() == Board::BoardState::WhiteCheckmated 
+            || board->getBoardState() == Board::BoardState::BlackCheckmated 
+            || board->getBoardState() == Board::BoardState::Stalemate) {
+            gameInProgress = false;
+            return;
+        }
     }
 }
 
