@@ -1,6 +1,7 @@
 #include "controller/game.h"
 #include "model/board.h"
 #include "controller/human.h"
+#include "view/textObserver.h"
 
 int main() {
     Board* board = new Board{8};
@@ -10,7 +11,11 @@ int main() {
         new HumanPlayer{board, Colour::Black}
     };
 
-    game.setUp();
+    TextObserver* textObs = new TextObserver{&game};
+    game.notifyObservers();
 
+    // game.setUp();
+
+    delete textObs;
     return 0;
 }

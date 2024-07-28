@@ -1,11 +1,12 @@
 #include "game.h"
 #include <iostream>
+#include <memory>
 #include "../shared/coordinate.h"
 #include "../model/pieces/pawn.h"
 #include "../view/observer.h"
 
 Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
-    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer}, gameState{} {};
+    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {};
 
 Game::~Game() {
     delete board;
@@ -20,7 +21,7 @@ Game::GameState::~GameState() {
     for (int i = 0; i < boardDimension; i++) {
         delete[] board[i];
     }
-    delete board;
+    delete[] board;
 }
 
 bool isCapital(char c) { //setup helper
@@ -177,22 +178,17 @@ void Game::attachObserver(Observer* obs) {
 }
 
 Game::GameState Game::getGameState() {
-    return gameState;
-}
-
-void Game::updateGameState() {
-    gameState = GameState {
+    return GameState{
         whiteScore,
         blackScore,
         currentTurn,
         board->getBoardDimension(),
         board->cloneBoard(),
-        board->getBoardState(),
+        board->getBoardState()
     };
 }
 
 void Game::notifyObservers() {
-    updateGameState();
     for (const auto it : observers) {
         it->notify();
     }
