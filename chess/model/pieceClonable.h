@@ -12,7 +12,7 @@ public:
         if (colour == Colour::White) {
             return T::SYMBOL;
         } else {
-            return tolower(T::SYMBOL);
+            return std::tolower(T::SYMBOL);
         }
     }
 

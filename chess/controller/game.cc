@@ -24,39 +24,6 @@ Game::GameState::~GameState() {
     delete[] board;
 }
 
-bool isCapital(char c) { //setup helper
-    return (c >= 'A' && c <= 'Z');
-}
-
-Piece* generatePiece(std::string pieceCode, Coordinate::Coordinate coords, Board* board) { //setup helper
-    Colour colour = isCapital(pieceCode[0]) ? Colour::White : Colour::Black;
-    char lcPieceCode = pieceCode[0];
-    if (lcPieceCode >= 'A' && lcPieceCode <= 'Z') {
-        lcPieceCode = 'a' + (lcPieceCode - 'A');
-    }
-
-    if (lcPieceCode == 'r') { //rook
-        return Board::initializePiece(coords, colour, Piece::PieceType::Rook, board);
-    }
-    else if (lcPieceCode == 'n') { //knight
-        return Board::initializePiece(coords, colour, Piece::PieceType::Knight, board);
-    }
-    else if (lcPieceCode == 'b') { //bishop
-        return Board::initializePiece(coords, colour, Piece::PieceType::Bishop, board);
-    }
-    else if (lcPieceCode == 'q') { //queen
-        return Board::initializePiece(coords, colour, Piece::PieceType::Queen, board);
-    }
-    else if (lcPieceCode == 'k') { //king
-        return Board::initializePiece(coords, colour, Piece::PieceType::King, board);
-    }
-    else if (lcPieceCode == 'p') { //pawn
-        return Board::initializePiece(coords, colour, Piece::PieceType::Pawn, board);
-    }
-
-    return nullptr;
-}
-
 void Game::setUp() { //this method interfaces with std::cout
     if (gameInProgress) {
         return;
@@ -75,19 +42,17 @@ void Game::setUp() { //this method interfaces with std::cout
             std::string pieceCode;
             std::string chessCoords;
             std::cin >> pieceCode >> chessCoords;
-            if (pieceCode.length() != 1) {
-                continue;
-            }
-            Piece* newPiece = generatePiece(pieceCode, Coordinate::chessToCartesian(chessCoords), board);
-            if (!board->addPiece(newPiece)) {
-                delete newPiece;
-            }
-            notifyObservers(); //redisplay board
+            if (!board->addPiece(pieceCode, Coordinate::chessToCartesian(chessCoords))) {
+                std::cout << "Add failed. Invalid piece code or position.\n";
+            };
+            notifyObservers();
         }
         else if (command == "-") { //remove piece
             std::string chessCoords;
             std::cin >> chessCoords;
-            board->removePiece(Coordinate::chessToCartesian(chessCoords));
+            if (!board->removePiece(Coordinate::chessToCartesian(chessCoords))) {
+                std::cout << "Remove failed. Invalid position.\n";
+            };
             notifyObservers();
         }
         else if (command == "=") { //set turn

@@ -7,6 +7,8 @@
 #include "./pieces/king.h"
 #include "../shared/colour.h"
 
+#include <cctype>
+
 Piece* Board::initializePiece(Coordinate::Coordinate coords, Colour colour, Piece::PieceType type, Board* board) {
     Piece* newPiece;
     switch (type) {
@@ -154,19 +156,53 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
 // }
 
-bool Board::addPiece(Piece* piece) {
-    if (nullptr == piece) return false;
-    Coordinate::Coordinate pos = piece->getPosition();
-
+bool Board::addPiece(std::string pieceCode, Coordinate::Coordinate pos) {
     //check if piece is in bounds
     if (!Coordinate::checkBounds(pos, boardDimension)) {
+        return false;
+    }
+
+    //check if piece code has length 1 before processing it
+    if (pieceCode.length() != 1) {
+        return false;
+    }
+
+    Piece* newPiece = nullptr;
+
+    Colour colour = std::isupper(pieceCode[0]) ? Colour::White : Colour::Black;
+    char lcPieceCode = pieceCode[0];
+    if (lcPieceCode >= 'A' && lcPieceCode <= 'Z') {
+        lcPieceCode = 'a' + (lcPieceCode - 'A');
+    }
+
+    if (lcPieceCode == 'r') { //rook
+        newPiece = new Rook{pos, colour, this};
+    }
+    else if (lcPieceCode == 'n') { //knight
+        newPiece = new Knight{pos, colour, this};
+    }
+    else if (lcPieceCode == 'b') { //bishop
+        newPiece = new Bishop{pos, colour, this};
+    }
+    else if (lcPieceCode == 'q') { //queen
+        newPiece = new Queen{pos, colour, this};
+    }
+    else if (lcPieceCode == 'k') { //king
+        newPiece = new King{pos, colour, this};
+    }
+    else if (lcPieceCode == 'p') { //pawn
+        newPiece = new Pawn{pos, colour, this};
+    }
+
+    //check if the piece code was valid
+    if (nullptr == newPiece) {
         return false;
     }
 
     if (nullptr != board[pos.row][pos.col]) {
         delete board[pos.row][pos.col]; //delete existing piece
     }
-    board[pos.row][pos.col] = piece;
+    board[pos.row][pos.col] = newPiece;
     return true;
 }
 
