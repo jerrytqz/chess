@@ -9,31 +9,6 @@
 
 #include <cctype>
 
-Piece* Board::initializePiece(Coordinate::Coordinate coords, Colour colour, Piece::PieceType type, Board* board) {
-    Piece* newPiece;
-    switch (type) {
-        case Piece::PieceType::Pawn:
-            newPiece = new Pawn{coords, colour, board};
-            break;   
-        case Piece::PieceType::Rook:
-            newPiece = new Rook{coords, colour, board};
-            break;
-        case Piece::PieceType::Knight:
-            newPiece = new Knight{coords, colour, board};
-            break;
-        case Piece::PieceType::Bishop:
-            newPiece = new Bishop{coords, colour, board};
-            break;
-        case Piece::PieceType::Queen:
-            newPiece = new Queen{coords, colour, board};
-            break;
-        case Piece::PieceType::King:
-            newPiece = new King{coords, colour, board};
-            break;
-    }
-    return newPiece;
-}
-
 Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
     for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
@@ -43,8 +18,8 @@ Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimen
     //if board dimension is 8 initialize with default chessboard
     if (boardDimension == 8) {
         for (int j = 0; j < 8; j++) { //pawns
-            board[1][j] = new Pawn{Coordinate::Coordinate{1, j}, Colour::White, this};
-            board[6][j] = new Pawn{Coordinate::Coordinate{6, j}, Colour::Black, this};
+            addPiece(Colour::White, Piece::PieceType::Pawn, Coordinate::Coordinate{1, j});
+            addPiece(Colour::Black, Piece::PieceType::Pawn, Coordinate::Coordinate{6, j});
         }
 
         const std::vector<Piece::PieceType> pieceOrder = {
@@ -53,15 +28,15 @@ Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimen
 
         for (int j = 0; j < pieceOrder.size(); j++) {
             //initialize white pieces
-            board[0][j] = initializePiece(Coordinate::Coordinate{0, j}, Colour::White, pieceOrder[j], this);
+            addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, j});
             if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
-                board[0][7 - j] = initializePiece(Coordinate::Coordinate{0, 7 - j}, Colour::White, pieceOrder[j], this);
+                addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, 7 - j});
             }
 
             //initialize black pieces
-            board[7][j] = initializePiece(Coordinate::Coordinate{7, j}, Colour::Black, pieceOrder[j], this);
+            addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, j});
             if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
-                board[7][7 - j] = initializePiece(Coordinate::Coordinate{7, 7 - j}, Colour::Black, pieceOrder[j], this);
+                addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, 7 - j});
             }
         }
     }
@@ -156,47 +131,33 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
 // }
 
-bool Board::addPiece(std::string pieceCode, Coordinate::Coordinate pos) {
+bool Board::addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos) {
     //check if piece is in bounds
     if (!Coordinate::checkBounds(pos, boardDimension)) {
         return false;
     }
 
-    //check if piece code has length 1 before processing it
-    if (pieceCode.length() != 1) {
-        return false;
-    }
-
     Piece* newPiece = nullptr;
 
-    Colour colour = std::isupper(pieceCode[0]) ? Colour::White : Colour::Black;
-    char lcPieceCode = pieceCode[0];
-    if (lcPieceCode >= 'A' && lcPieceCode <= 'Z') {
-        lcPieceCode = 'a' + (lcPieceCode - 'A');
-    }
-
-    if (lcPieceCode == 'r') { //rook
-        newPiece = new Rook{pos, colour, this};
-    }
-    else if (lcPieceCode == 'n') { //knight
-        newPiece = new Knight{pos, colour, this};
-    }
-    else if (lcPieceCode == 'b') { //bishop
-        newPiece = new Bishop{pos, colour, this};
-    }
-    else if (lcPieceCode == 'q') { //queen
-        newPiece = new Queen{pos, colour, this};
-    }
-    else if (lcPieceCode == 'k') { //king
-        newPiece = new King{pos, colour, this};
-    }
-    else if (lcPieceCode == 'p') { //pawn
-        newPiece = new Pawn{pos, colour, this};
-    }
-
-    //check if the piece code was valid
-    if (nullptr == newPiece) {
-        return false;
+    switch (type) {
+        case Piece::PieceType::Pawn:
+            newPiece = new Pawn{pos, colour, this};
+            break;
+        case Piece::PieceType::Rook:
+            newPiece = new Rook{pos, colour, this};
+            break;
+        case Piece::PieceType::Knight:
+            newPiece = new Knight{pos, colour, this};
+            break;
+        case Piece::PieceType::Bishop:
+            newPiece = new Bishop{pos, colour, this};
+            break;
+        case Piece::PieceType::Queen:
+            newPiece = new Queen{pos, colour, this};
+            break;
+        case Piece::PieceType::King:
+            newPiece = new King{pos, colour, this};
+            break;
     }
 
     if (nullptr != board[pos.row][pos.col]) {
@@ -204,6 +165,46 @@ bool Board::addPiece(std::string pieceCode, Coordinate::Coordinate pos) {
     }
     board[pos.row][pos.col] = newPiece;
     return true;
+}
+
+bool Board::addPiece(std::string pieceCode, Coordinate::Coordinate pos) {
+    //check if piece code has length 1 before processing it
+    if (pieceCode.length() != 1) {
+        return false;
+    }
+
+    Colour colour = std::isupper(pieceCode[0]) ? Colour::White : Colour::Black;
+    char lcPieceCode = pieceCode[0];
+    if (lcPieceCode >= 'A' && lcPieceCode <= 'Z') {
+        lcPieceCode = 'a' + (lcPieceCode - 'A');
+    }
+
+    Piece::PieceType newPieceType;
+
+    switch(lcPieceCode) {
+        case 'r':
+            newPieceType = Piece::PieceType::Rook;
+            break;
+        case 'n':
+            newPieceType = Piece::PieceType::Knight;
+            break;
+        case 'b':
+            newPieceType = Piece::PieceType::Bishop;
+            break;
+        case 'q':
+            newPieceType = Piece::PieceType::Queen;
+            break;
+        case 'k':
+            newPieceType = Piece::PieceType::King;
+            break;
+        case 'p':
+            newPieceType = Piece::PieceType::Pawn;
+            break;
+        default:
+            return false;
+    }
+
+    return addPiece(colour, newPieceType, pos);
 }
 
 bool Board::removePiece(Coordinate::Coordinate pos) {

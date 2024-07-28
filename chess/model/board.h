@@ -28,9 +28,9 @@ class Board {
         bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(std::string pieceCode, Coordinate::Coordinate pos);
+        bool addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos);
         bool removePiece(Coordinate::Coordinate pos);
         bool verifyBoard(Colour currentTurn); //called by Game during setup
-        static Piece* initializePiece(Coordinate::Coordinate coords, Colour colour, Piece::PieceType type, Board* board);
 
     protected:
 

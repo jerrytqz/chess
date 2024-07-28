@@ -44,6 +44,7 @@ void Game::setUp() { //this method interfaces with std::cout
             std::cin >> pieceCode >> chessCoords;
             if (!board->addPiece(pieceCode, Coordinate::chessToCartesian(chessCoords))) {
                 std::cout << "Add failed. Invalid piece code or position.\n";
+                continue;
             };
             notifyObservers();
         }
@@ -52,6 +53,7 @@ void Game::setUp() { //this method interfaces with std::cout
             std::cin >> chessCoords;
             if (!board->removePiece(Coordinate::chessToCartesian(chessCoords))) {
                 std::cout << "Remove failed. Invalid position.\n";
+                continue;
             };
             notifyObservers();
         }
@@ -72,6 +74,8 @@ void Game::setUp() { //this method interfaces with std::cout
             else {
                 std::cout << "Invalid board: unable to leave setup mode.\n";
             }
+        } else {
+            std::cout << "Invalid command.\n";
         }
     }
 }
