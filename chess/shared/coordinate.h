@@ -1,7 +1,7 @@
 #ifndef COORDINATE_H
 #define COORDINATE_H
 
-#include<string>
+#include <string>
 
 namespace Coordinate {
 
