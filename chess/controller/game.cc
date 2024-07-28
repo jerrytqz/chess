@@ -14,7 +14,7 @@ Game::~Game() {
 }
 
 Game::GameState::GameState(float whiteScore, float blackScore, Colour currentTurn, int boardDimension, std::unique_ptr<Piece>** board, Board::BoardState boardState):
-    whiteScore{whiteScore}, blackScore{blackScore}, currentTurn{currentTurn}, boardDimension{boardDimension}, board{board}, boardState{boardState} {};
+    whiteScore{whiteScore}, blackScore{blackScore}, currentTurn{currentTurn}, boardDimension{boardDimension}, board{board}, boardState{boardState} {}
 
 Game::GameState::~GameState() {
     for (int i = 0; i < boardDimension; i++) {

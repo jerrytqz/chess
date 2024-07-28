@@ -71,6 +71,9 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     if (!fromPiece->makeMove(to)) {
         return false;
     }
+    delete board[to.row][to.col];
+    board[to.row][to.col] = fromPiece;
+    board[from.row][from.col] = nullptr;
 
     // Fourth stage of checks: is the board state still valid after the move?
     computeBoardState(col);

@@ -15,8 +15,13 @@ std::string Coordinate::cartesianToChess(Coordinate cartesianCoordinate) {
 
 bool Coordinate::checkValidChess(std::string possibleChessCoordinate) {
     std::string str = possibleChessCoordinate;
-    if (str.length() != 2 && str[0] >= 'a' && str[0] <= 'h' && str[1] >= '1' && str[1] <= '8')
+    if (str.length() != 2 && str[0] >= 'a' && str[0] <= 'h' && str[1] >= '1' && str[1] <= '8') {
         return true;
+    }
 
     return false;
+}
+
+bool Coordinate::checkBounds(Coordinate coord, int dimension) {
+    return coord.row >= 0 && coord.row < dimension && coord.col >= 0 && coord.col < dimension;
 }
