@@ -32,10 +32,14 @@ void Board::computeBoardState(Colour turn) {
 }
 
 bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
-    Piece* piece = board[from.row][from.col];
+    Piece* fromPiece = board[from.row][from.col];
+    std::unique_ptr<Piece> toPiece = nullptr;
+    if (nullptr != board[to.row][to.col]) {
+        toPiece = board[to.row][to.col]->clone();
+    }
 
     // First stage of checks: is there a piece at the from coordinate and is it the correct colour?
-    if (nullptr == piece || piece->getColour() != col) {
+    if (nullptr == fromPiece || fromPiece->getColour() != col) {
         return false;
     }
 
@@ -46,14 +50,18 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     }
 
     // Third stage of checks: can the piece make the move?
-    bool moved = piece->makeMove(to);
-    if (!moved) {
+    if (!fromPiece->makeMove(to)) {
         return false;
     }
 
     // Fourth stage of checks: is the board state still valid after the move?
     computeBoardState(col);
     if ((col == Colour::White && boardState == WhiteChecked) || (col == Colour::Black && boardState == BlackChecked)) {
+        // Undo move if player is still in check or have moved themselves into a check
+        board[from.row][from.col] = fromPiece;
+        if (nullptr != toPiece) {
+            board[to.row][to.col] = toPiece.release();
+        }
         return false;
     }
 
