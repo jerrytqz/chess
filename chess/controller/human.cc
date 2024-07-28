@@ -11,9 +11,7 @@ bool HumanPlayer::takeTurn() {
     std::string action;
     std::cin >> action;
 
-    bool validMoveMade = false;
-
-    while (!validMoveMade) {
+    while (true) {
         if (action == "move") {
             std::string from, to;
             std::cin >> from >> to;
@@ -25,7 +23,6 @@ bool HumanPlayer::takeTurn() {
 
             board->takeTurn(Coordinate::chessToCartesian(from), Coordinate::chessToCartesian(to), colour);
 
-            validMoveMade = true;
             return true;
         }
         else if (action == "resign") {
@@ -35,6 +32,4 @@ bool HumanPlayer::takeTurn() {
             std::cout << "Invalid action, try again" << std::endl;
         }
     }
-
-    return true;
 }

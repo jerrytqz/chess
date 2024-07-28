@@ -53,7 +53,7 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     // Fourth stage of checks: is the board state still valid after the move?
     computeBoardState(col);
-    if (col == Colour::White && boardState == WhiteChecked || col == Colour::Black && boardState == BlackChecked) {
+    if ((col == Colour::White && boardState == WhiteChecked) || (col == Colour::Black && boardState == BlackChecked)) {
         return false;
     }
 

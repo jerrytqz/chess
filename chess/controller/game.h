@@ -4,8 +4,9 @@
 #include <vector>
 #include "../shared/colour.h"
 #include "../model/board.h"
+#include "../controller/player.h"
+
 class Piece;
-class Player;
 class Observer;
 
 int defaultBoardDimension = 8;

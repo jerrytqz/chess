@@ -4,7 +4,6 @@
 #include <vector>
 #include "../shared/colour.h"
 class Board;
-class Piece;
 
 class Player {
     public:
