@@ -12,7 +12,7 @@ class ComputerPlayer : Player {
         ComputerPlayer(Board* board, Colour colour, int level);
         ~ComputerPlayer(); //DTOR
 
-        void takeTurn() override;
+        bool takeTurn() override;
 
     protected:
 

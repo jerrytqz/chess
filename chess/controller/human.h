@@ -12,7 +12,7 @@ class HumanPlayer : Player {
         HumanPlayer(Board* board, Colour colour);
         ~HumanPlayer() = default; //DTOR
 
-        void takeTurn() override;
+        bool takeTurn() override;
 
     protected:
 
