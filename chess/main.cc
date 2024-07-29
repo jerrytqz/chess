@@ -1,14 +1,13 @@
 #include "controller/game.h"
 #include "model/board.h"
-#include "controller/human.h"
+#include "controller/player.h"
 #include "view/textObserver.h"
 
 int main() {
-    Board* board = new Board{8};
     Game game{
-        board, 
-        new HumanPlayer{board, Colour::White}, 
-        new HumanPlayer{board, Colour::Black}
+        new Board{8}, 
+        Player::PlayerType::Human,
+        Player::PlayerType::Computer
     };
 
     Observer* textObs = new TextObserver{&game};

@@ -1,12 +1,16 @@
-#include "game.h"
 #include <iostream>
 #include <memory>
+#include "game.h"
 #include "../shared/coordinate.h"
 #include "../model/board.h"
 #include "../view/observer.h"
+#include "human.h"
 
-Game::Game(Board* board, Player* whitePlayer, Player* blackPlayer):
-    board{board}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer}, currentTurn{Colour::White} {}
+Game::Game(Board* board, Player::PlayerType whitePlayerType, Player::PlayerType blackPlayerType):
+    board{board}, 
+    whitePlayer{whitePlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::White} : new HumanPlayer{board, Colour::White}}, 
+    blackPlayer{blackPlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::Black} : new HumanPlayer{board, Colour::Black}}, 
+    currentTurn{Colour::White} {}
 
 Game::~Game() {
     delete board;

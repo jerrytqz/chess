@@ -4,7 +4,7 @@
 #include <vector>
 #include "../shared/colour.h"
 #include "../model/board.h"
-#include "../controller/player.h"
+#include "player.h"
 
 class Piece;
 class Observer;
@@ -24,7 +24,7 @@ class Game {
                 Board::BoardState boardState;
         };
 
-        Game(Board* board, Player* whitePlayer, Player* blackPlayer); //CTOR
+        Game(Board* board, Player::PlayerType whitePlayerType, Player::PlayerType blackPlayerType); //CTOR
         ~Game(); //DTOR
 
         void setUp();

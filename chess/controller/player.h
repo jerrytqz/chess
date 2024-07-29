@@ -7,6 +7,11 @@ class Board;
 
 class Player {
     public:
+        enum class PlayerType {
+            Human,
+            Computer
+        };
+
         Player(Board* board, Colour colour); //CTOR
         virtual ~Player() = default; //DTOR
 
