@@ -12,10 +12,10 @@ public:
 
     Knight(Coordinate::Coordinate position, Colour colour, Board* board);
 
-    virtual ~Knight() = default;
+    ~Knight() = default;
 
-    virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    virtual bool makeMove(Coordinate::Coordinate dest) override;
+    std::vector<Coordinate::Coordinate> getValidMoves() const override;
+    bool makeMove(Coordinate::Coordinate dest) override;
 };
 
 #endif

@@ -13,11 +13,11 @@ public:
 
     Pawn(Coordinate::Coordinate position, Colour colour, Board* board);
 
-    virtual ~Pawn() = default;
+    ~Pawn() = default;
 
-    virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    virtual bool canTargetSquare(Coordinate::Coordinate square) const override;
-    virtual bool makeMove(Coordinate::Coordinate dest) override;
+    std::vector<Coordinate::Coordinate> getValidMoves() const override;
+    bool canTargetSquare(Coordinate::Coordinate square) const override;
+    bool makeMove(Coordinate::Coordinate dest) override;
 };
 
 #endif

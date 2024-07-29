@@ -214,7 +214,7 @@ bool Board::verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coor
     board[from.row][from.col] = nullptr;
     board[to.row][to.col] = fromPiece;
 
-    //is the board state still valid after the move? (can not move into a check)
+    //is the board state still valid after the move? (cannot move into a check)
     bool valid = !isKingInCheck(fromPiece->getColour());
 
     //undo move and return
