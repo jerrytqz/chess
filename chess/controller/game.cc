@@ -4,13 +4,22 @@
 #include "../shared/coordinate.h"
 #include "../model/board.h"
 #include "../view/observer.h"
+#include "computer.h"
 #include "human.h"
 
 Game::Game(Board* board, Player::PlayerType whitePlayerType, Player::PlayerType blackPlayerType):
     board{board}, 
-    whitePlayer{whitePlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::White} : new HumanPlayer{board, Colour::White}}, 
-    blackPlayer{blackPlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::Black} : new HumanPlayer{board, Colour::Black}}, 
-    currentTurn{Colour::White} {}
+    currentTurn{Colour::White} {
+        if (whitePlayerType == Player::PlayerType::Human)
+            whitePlayer = new HumanPlayer{board, Colour::White};
+        else
+            whitePlayer = new ComputerPlayer{board, Colour::White};
+
+        if (blackPlayerType == Player::PlayerType::Human)
+            blackPlayer = new HumanPlayer{board, Colour::Black};
+        else
+            blackPlayer = new ComputerPlayer{board, Colour::Black}; 
+    }
 
 Game::~Game() {
     delete board;
@@ -86,6 +95,7 @@ void Game::setUp() { //this method interfaces with std::cout
 void Game::play() {
     gameInProgress = true;
     while (gameInProgress) {
+        notifyObservers();
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
                 ++blackScore;
@@ -104,6 +114,9 @@ void Game::play() {
             }
         }
 
+        //next turn and recompute boardState
+        currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
+        board->computeBoardState(currentTurn);
         if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
             ++blackScore;
             gameInProgress = false;
@@ -115,9 +128,6 @@ void Game::play() {
             blackScore += 0.5;
             gameInProgress = false;
         }
-
-        currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
-        notifyObservers();
     }
 }
 

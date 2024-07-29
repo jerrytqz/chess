@@ -24,26 +24,19 @@ std::vector<Coordinate::Coordinate> Knight::getValidMoves() const {
         Coordinate::Coordinate nextPos{position.row + dRow, position.col + dCol};
 
         if (!Coordinate::checkBounds(nextPos, board->getBoardDimension())) {
-            continue;
+            continue; //unable to move in this direction (edge of board)
         }
 
-        std::unique_ptr<Piece> destinationPiece = board->getPiece(nextPos);
-        if (destinationPiece == nullptr || destinationPiece->getColour() != this->getColour()) {
+        std::unique_ptr<Piece> targetPiece = board->getPiece(nextPos);
+        bool canCapture = targetPiece && targetPiece->getColour() != this->getColour();
+        bool canMove = !targetPiece || canCapture;
+
+        if (canMove) {
             validMoves.push_back(nextPos);
         }
     }
 
     return validMoves;
-}
-
-bool Knight::canTargetSquare(Coordinate::Coordinate square) const {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
-        return false;
-    }
-    else {
-        return true;
-    }
 }
 
 bool Knight::makeMove(Coordinate::Coordinate dest) {

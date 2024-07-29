@@ -14,7 +14,6 @@ int main() {
 
     // game.setUp();
 
-    game.notifyObservers();
     game.play();
 
     delete textObs;
