@@ -111,30 +111,11 @@ bool Board::isKingInCheck(Colour kingColour) const {
     return canTargetSquare(kingPos, opponentColour);
 }
 void Board::computeBoardState(Colour turn) {
-    Coordinate::Coordinate whiteKingPos;
-    Coordinate::Coordinate blackKingPos;
-
-    for (int i = 0; i < boardDimension; i++) {
-        for (int j = 0; j < boardDimension; j++) {
-            Piece* piece = board[i][j];
-            if (piece != nullptr) {
-                if (piece->getPieceType() == Piece::PieceType::King) {
-                    if (piece->getColour() == Colour::White) {
-                        whiteKingPos = {i, j};
-                    } else {
-                        blackKingPos = {i, j};
-                    }
-                }
-            }
-        }
-    }
-
     //check for check
-    bool whiteInCheck = canTargetSquare(whiteKingPos, Colour::Black);
-    bool blackInCheck = canTargetSquare(blackKingPos, Colour::White);
+    bool whiteInCheck = isKingInCheck(Colour::White);
+    bool blackInCheck = isKingInCheck(Colour::Black);
 
     // does player have any valid moves?
-    //!_!_!_!_!_!_!_!__!!_!!!!___!!__!_!__!!__!_THIS SECTION OF CODE IS INCORRECT!!!
     bool hasValidMoves = false;
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
@@ -205,9 +186,8 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     board[to.row][to.col] = board[from.row][from.col];
     board[from.row][from.col] = nullptr;
 
-    // Third stage of checks: is the board state still valid after the move?
-    computeBoardState(col);
-    if ((col == Colour::White && boardState == WhiteChecked) || (col == Colour::Black && boardState == BlackChecked)) {
+    // Third stage of checks: has player moved into check?
+    if (isKingInCheck(col)) {
         // Undo move if player is still in check or have moved themselves into a check
         delete board[to.row][to.col]; //delete the moved piece
         board[from.row][from.col] = fromPieceOriginal.release(); //replace with original piece

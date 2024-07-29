@@ -105,6 +105,9 @@ void Game::play() {
             }
         }
 
+        //next turn and recompute boardState
+        currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
+        board->computeBoardState(currentTurn);
         if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
             ++blackScore;
             gameInProgress = false;
@@ -116,8 +119,6 @@ void Game::play() {
             blackScore += 0.5;
             gameInProgress = false;
         }
-
-        currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
     }
 }
 
