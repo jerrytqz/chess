@@ -1,7 +1,5 @@
 #ifndef HUMANPLAYER_H
 #define HUMANPLAYER_H
-
-#include <random>
 #include <vector>
 #include "../shared/colour.h"
 #include "./player.h"
@@ -18,8 +16,6 @@ class ComputerPlayer : public Player {
 
     private:
         int level;
-        std::random_device rd; 
-        std::mt19937 gen;
 
         void levelOne();
         void levelTwo();

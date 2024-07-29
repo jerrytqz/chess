@@ -1,5 +1,5 @@
+#include <cstdlib>
 #include <iostream>
-#include <random>
 #include <string>
 #include <vector>
 #include "computer.h"
@@ -8,7 +8,7 @@
 #include "../shared/coordinate.h"
 
 ComputerPlayer::ComputerPlayer(Board* board, Colour colour, int level)
-    : Player{board, colour}, level(level), gen(rd()) {}
+    : Player{board, colour}, level(level) {}
 
 bool ComputerPlayer::takeTurn() {
     if (colour == Colour::White) {
@@ -49,13 +49,11 @@ void ComputerPlayer::levelOne() {
         }
     }
 
-    std::uniform_int_distribution<> pieceDist(0, myPieces.size() - 1);
-    int randPiece = pieceDist(gen);
+    int randPiece = rand() % myPieces.size();
 
     std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMoves();
 
-    std::uniform_int_distribution<> moveDist(0, validMoves.size() - 1);
-    int randMove = moveDist(gen);
+    int randMove = rand() % validMoves.size();
 
     board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
 }
