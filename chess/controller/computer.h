@@ -1,13 +1,17 @@
-#ifndef HUMANPLAYER_H
-#define HUMANPLAYER_H
+#ifndef COMPUTERPLAYER_H
+#define COMPUTERPLAYER_H
 #include <vector>
+#include <tuple>
+#include <random>
 #include "../shared/colour.h"
+#include "../shared/coordinate.h"
 #include "./player.h"
 class Board;
 
 class ComputerPlayer : public Player {
     public:
         ComputerPlayer(Board* board, Colour colour, int level);
+        ComputerPlayer(Board* board, Colour colour);
         ~ComputerPlayer() = default; //DTOR
 
         bool takeTurn() override;
@@ -15,12 +19,20 @@ class ComputerPlayer : public Player {
     protected:
 
     private:
+        static std::mt19937 rng;
+
+        struct ChessMove {
+            Coordinate::Coordinate from;
+            Coordinate::Coordinate to;
+            int point;
+        };
+
         int level;
 
-        void levelOne();
-        void levelTwo();
-        void levelThree();
-        void levelFour();
+        bool levelOne();
+        bool levelTwo();
+        bool levelThree();
+        bool levelFour();
 };
 
 #endif

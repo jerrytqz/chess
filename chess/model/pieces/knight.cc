@@ -25,7 +25,7 @@ std::vector<Coordinate::Coordinate> Knight::getValidMoves() const {
         Coordinate::Coordinate nextPos{position.row + dRow, position.col + dCol};
 
         if (!Coordinate::checkBounds(nextPos, board->getBoardDimension())) {
-            break; //unable to move in this direction (edge of board)
+            continue; //unable to move in this direction (edge of board)
         }
 
         std::unique_ptr<Piece> targetPiece = board->getPiece(nextPos);

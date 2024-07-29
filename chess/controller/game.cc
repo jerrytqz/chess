@@ -4,13 +4,22 @@
 #include "../shared/coordinate.h"
 #include "../model/board.h"
 #include "../view/observer.h"
+#include "computer.h"
 #include "human.h"
 
 Game::Game(Board* board, Player::PlayerType whitePlayerType, Player::PlayerType blackPlayerType):
     board{board}, 
-    whitePlayer{whitePlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::White} : new HumanPlayer{board, Colour::White}}, 
-    blackPlayer{blackPlayerType == Player::PlayerType::Human ? new HumanPlayer{board, Colour::Black} : new HumanPlayer{board, Colour::Black}}, 
-    currentTurn{Colour::White} {}
+    currentTurn{Colour::White} {
+        if (whitePlayerType == Player::PlayerType::Human)
+            whitePlayer = new HumanPlayer{board, Colour::White};
+        else
+            whitePlayer = new ComputerPlayer{board, Colour::White};
+
+        if (blackPlayerType == Player::PlayerType::Human)
+            blackPlayer = new HumanPlayer{board, Colour::Black};
+        else
+            blackPlayer = new ComputerPlayer{board, Colour::Black}; 
+    }
 
 Game::~Game() {
     delete board;
