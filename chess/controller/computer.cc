@@ -44,7 +44,7 @@ void ComputerPlayer::levelOne() {
     for (int i = 0; i < board->getBoardDimension(); ++i) {
         for (int j = 0; j < board->getBoardDimension(); ++j) {
             if (pieces[i][j]->getColour() == colour) {
-                myPieces.push_back(pieces[i][j]);
+                myPieces.push_back(std::move(pieces[i][j]));
             }
         }
     }
@@ -56,4 +56,16 @@ void ComputerPlayer::levelOne() {
     int randMove = rand() % validMoves.size();
 
     board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
+}
+
+void ComputerPlayer::levelTwo() {
+
+}
+
+void ComputerPlayer::levelThree() {
+
+}
+
+void ComputerPlayer::levelFour() {
+    
 }

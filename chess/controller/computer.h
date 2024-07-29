@@ -8,7 +8,7 @@ class Board;
 class ComputerPlayer : public Player {
     public:
         ComputerPlayer(Board* board, Colour colour, int level);
-        ~ComputerPlayer(); //DTOR
+        ~ComputerPlayer() = default; //DTOR
 
         bool takeTurn() override;
 
