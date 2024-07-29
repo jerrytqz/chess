@@ -7,15 +7,15 @@ class Board;
 
 class Player {
     public:
+        Player(Board* board, Colour colour); //CTOR
         virtual ~Player() = default; //DTOR
 
         virtual bool takeTurn() = 0;
 
     protected:
-
-    private:
-        Board* board;
+        Board* const board;
         Colour colour;
+    private:
 };
 
 #endif

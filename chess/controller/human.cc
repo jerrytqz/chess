@@ -5,7 +5,7 @@
 #include "../shared/colour.h"
 #include "../shared/coordinate.h"
 
-HumanPlayer::HumanPlayer(Board* board, Colour colour) : board(board), colour(colour) {}
+HumanPlayer::HumanPlayer(Board* board, Colour colour) : Player{board, colour} {}
 
 bool HumanPlayer::takeTurn() {
     if (colour == Colour::White) {

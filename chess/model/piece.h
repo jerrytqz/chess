@@ -37,7 +37,7 @@ public:
 protected:
     Coordinate::Coordinate position;
     Colour colour;
-    Board* board;
+    Board* const board;
 
     virtual Piece* cloneImpl() = 0;
 private:

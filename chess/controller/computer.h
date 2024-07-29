@@ -16,8 +16,6 @@ class ComputerPlayer : public Player {
     protected:
 
     private:
-        Board* board;
-        Colour colour;
         int level;
 };
 

@@ -30,10 +30,7 @@ void Game::setUp() { //this method interfaces with std::cout
     }
 
     //delete current board and initialize new board
-    if (board) {
-        delete board;
-    }
-    board = new Board{8};
+    board->reset();
     notifyObservers();
 
     //command handling

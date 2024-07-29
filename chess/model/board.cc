@@ -102,21 +102,17 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
         return false;
     }
 
-    // Second stage of checks: does the board state allow moving?
-    computeBoardState(col);
-    if (boardState == WhiteCheckmated || boardState == BlackCheckmated || boardState == Stalemate) {
-        return false;
-    }
-
-    // Third stage of checks: can the piece make the move?
+    // Second stage of checks: can the piece make the move?
     if (!fromPiece->makeMove(to)) {
         return false;
     }
-    delete board[to.row][to.col];
+    if (nullptr != board[to.row][to.col]) {
+        delete board[to.row][to.col];
+    }
     board[to.row][to.col] = fromPiece;
     board[from.row][from.col] = nullptr;
 
-    // Fourth stage of checks: is the board state still valid after the move?
+    // Third stage of checks: is the board state still valid after the move?
     computeBoardState(col);
     if ((col == Colour::White && boardState == WhiteChecked) || (col == Colour::Black && boardState == BlackChecked)) {
         // Undo move if player is still in check or have moved themselves into a check
@@ -256,4 +252,15 @@ bool Board::verifyBoard(Colour currentTurn) {
     }
 
     return true;
+}
+
+void Board::reset() {
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            if (board[i][j] != nullptr) {
+                delete board[i][j];
+                board[i][j] = nullptr;
+            }
+        }
+    }
 }

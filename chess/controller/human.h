@@ -16,8 +16,6 @@ class HumanPlayer : public Player {
     protected:
 
     private:
-        Board* board;
-        Colour colour;
 };
 
 #endif

@@ -38,7 +38,7 @@ class Game {
     protected:
 
     private:
-        Board* board;
+        Board* const board;
         Player* whitePlayer;
         Player* blackPlayer;
         float whiteScore = 0;
