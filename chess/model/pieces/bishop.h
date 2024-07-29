@@ -12,10 +12,10 @@ public:
 
     Bishop(Coordinate::Coordinate position, Colour colour, Board* board);
 
-    virtual ~Bishop() = default;
+    ~Bishop() = default;
 
-    virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    virtual bool makeMove(Coordinate::Coordinate dest) override;
+    std::vector<Coordinate::Coordinate> getValidMoves() const override;
+    bool makeMove(Coordinate::Coordinate dest) override;
 };
 
 #endif

@@ -29,13 +29,14 @@ int Piece::getValue() const {
 }
 
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
-    std::vector<Coordinate::Coordinate> validMoves;
-    for (Coordinate::Coordinate nextPos : getValidMoves()) {
+    std::vector<Coordinate::Coordinate> validLegalMoves;
+    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+    for (Coordinate::Coordinate nextPos : validMoves) {
         if (board->verifyNoCheckAfterMove(position, nextPos)) {
             validMoves.push_back(nextPos);
         }
     }
-    return validMoves;
+    return validLegalMoves;
 }
 
 bool Piece::canTargetSquare(Coordinate::Coordinate square) const {
