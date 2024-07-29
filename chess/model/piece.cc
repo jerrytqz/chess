@@ -30,10 +30,9 @@ int Piece::getValue() const {
 
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
     std::vector<Coordinate::Coordinate> validLegalMoves;
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    for (Coordinate::Coordinate nextPos : validMoves) {
+    for (Coordinate::Coordinate nextPos : getValidMoves()) {
         if (board->verifyNoCheckAfterMove(position, nextPos)) {
-            validMoves.push_back(nextPos);
+            validLegalMoves.push_back(nextPos);
         }
     }
     return validLegalMoves;
