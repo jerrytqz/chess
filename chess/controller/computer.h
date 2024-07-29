@@ -17,10 +17,10 @@ class ComputerPlayer : public Player {
     private:
         int level;
 
-        void levelOne();
-        void levelTwo();
-        void levelThree();
-        void levelFour();
+        bool levelOne();
+        bool levelTwo();
+        bool levelThree();
+        bool levelFour();
 };
 
 #endif

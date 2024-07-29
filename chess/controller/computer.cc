@@ -18,26 +18,28 @@ bool ComputerPlayer::takeTurn() {
         std::cout << "Black's turn: ";
     }
 
+    bool turnTaken;
+
     switch (level)
     {
     case 4:
-        levelFour();
+        turnTaken = levelFour();
         break;
     case 3:
-        levelThree();
+        turnTaken = levelThree();
         break;
     case 2:
-        levelTwo();
+        turnTaken = levelTwo();
         break;
     default:
-        levelOne();
+        turnTaken = levelOne();
         break;
     }
 
-    return true;
+    return turnTaken;
 }
 
-void ComputerPlayer::levelOne() {
+bool ComputerPlayer::levelOne() {
     std::unique_ptr<Piece> **pieces = board->cloneBoard();
     std::vector<std::unique_ptr<Piece>> myPieces {};
 
@@ -49,11 +51,58 @@ void ComputerPlayer::levelOne() {
         }
     }
 
-    int randPiece = rand() % myPieces.size();
+    while (myPieces.size() > 0)
+    {
+        int randPiece = rand() % myPieces.size();
 
-    std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMoves();
+        std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMoves();
 
-    int randMove = rand() % validMoves.size();
+        if (validMoves.size() == 0) {
+            myPieces.erase(myPieces.begin() + randPiece);
+            continue;
+        }
 
-    board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
+        int randMove = rand() % validMoves.size();
+
+        bool turnTaken = board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
+
+        if (turnTaken)
+            return true;
+    }
+
+    return false;
+}
+
+bool ComputerPlayer::levelOne() {
+    std::unique_ptr<Piece> **pieces = board->cloneBoard();
+    std::vector<std::unique_ptr<Piece>> myPieces {};
+
+    for (int i = 0; i < board->getBoardDimension(); ++i) {
+        for (int j = 0; j < board->getBoardDimension(); ++j) {
+            if (pieces[i][j]->getColour() == colour) {
+                myPieces.push_back(pieces[i][j]);
+            }
+        }
+    }
+
+    while (myPieces.size() > 0)
+    {
+        int randPiece = rand() % myPieces.size();
+
+        std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMoves();
+
+        if (validMoves.size() == 0) {
+            myPieces.erase(myPieces.begin() + randPiece);
+            continue;
+        }
+
+        int randMove = rand() % validMoves.size();
+
+        bool turnTaken = board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
+
+        if (turnTaken)
+            return true;
+    }
+
+    return false;
 }
