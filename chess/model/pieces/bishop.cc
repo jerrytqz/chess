@@ -1,5 +1,6 @@
 #include "bishop.h"
 #include "../board.h"
+#include <utility>
 
 Bishop::Bishop(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Bishop, board} {}

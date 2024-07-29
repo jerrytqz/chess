@@ -1,5 +1,6 @@
 #include "rook.h"
 #include "../board.h"
+#include <utility>
 
 Rook::Rook(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Rook, board}, hasMoved{false} {}

@@ -1,5 +1,6 @@
 #include "knight.h"
 #include "../board.h"
+#include <utility>
 
 Knight::Knight(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Knight, board} {}

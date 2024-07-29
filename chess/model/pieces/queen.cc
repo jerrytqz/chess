@@ -1,5 +1,6 @@
 #include "queen.h"
 #include "../board.h"
+#include <utility>
 
 Queen::Queen(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::Queen, board} {}
