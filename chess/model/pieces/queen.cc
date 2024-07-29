@@ -13,7 +13,7 @@ std::vector<Coordinate::Coordinate> Queen::getValidMoves() const {
         {-1, 0},
         {0, 1},
         {0, -1},
-        
+
         //bishop mechanics
         {1, 1},
         {-1, 1},
@@ -21,7 +21,9 @@ std::vector<Coordinate::Coordinate> Queen::getValidMoves() const {
         {1, -1}
     }};
 
-    for (const auto& [dRow, dCol] : directions) {
+    for (const auto& dir : directions) {
+        int dRow = dir.first;
+        int dCol = dir.second;
         for (int i = 1;; ++i) {
             Coordinate::Coordinate nextPos{position.row + i * dRow, position.col + i * dCol};
 

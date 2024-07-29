@@ -14,7 +14,9 @@ std::vector<Coordinate::Coordinate> Rook::getValidMoves() const {
         {0, -1}
     }};
 
-    for (const auto& [dRow, dCol] : directions) {
+    for (const auto& dir : directions) {
+        int dRow = dir.first;
+        int dCol = dir.second;
         for (int i = 1;; ++i) {
             Coordinate::Coordinate nextPos{position.row + i * dRow, position.col + i * dCol};
 

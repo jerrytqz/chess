@@ -18,7 +18,9 @@ std::vector<Coordinate::Coordinate> Knight::getValidMoves() const {
         {-2, -1},
     }};
 
-    for (const auto& [dRow, dCol] : directions) {
+    for (const auto& dir : directions) {
+        int dRow = dir.first;
+        int dCol = dir.second;
         Coordinate::Coordinate nextPos{position.row + dRow, position.col + dCol};
 
         if (!Coordinate::checkBounds(nextPos, board->getBoardDimension())) {
