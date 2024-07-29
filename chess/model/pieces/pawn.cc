@@ -39,7 +39,17 @@ std::vector<Coordinate::Coordinate> Pawn::getValidMoves() const {
 }
 
 bool Pawn::canTargetSquare(Coordinate::Coordinate square) const {
-    // Implementation goes here
+    if (square.col == position.col) { //can not target from same column
+        return false;
+    }
+
+    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 bool Pawn::makeMove(Coordinate::Coordinate dest) {
