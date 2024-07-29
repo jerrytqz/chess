@@ -85,7 +85,7 @@ std::unique_ptr<Piece>** Board::cloneBoard() {
     return clonedBoard;
 }
 
-bool Board::canTargetSquare(Coordinate::Coordinate square, Colour colour) { //private helper function for computeBoardState
+bool Board::canTargetSquare(Coordinate::Coordinate square, Colour colour) const {
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
             if (board[i][j] && board[i][j]->getColour() == colour && board[i][j]->canTargetSquare(square)) {
@@ -94,6 +94,21 @@ bool Board::canTargetSquare(Coordinate::Coordinate square, Colour colour) { //pr
         }
     }
     return false;
+}
+bool Board::isKingInCheck(Colour kingColour) const {
+    Coordinate::Coordinate kingPos;
+    for (int i = 0; i < boardDimension; ++i) {
+        for (int j = 0; j < boardDimension; ++j) {
+            Piece* piece = board[i][j];
+            if (piece && piece->getColour() == kingColour && piece->getPieceType() == Piece::PieceType::King) {
+                kingPos = piece->getPosition();
+                break;
+            }
+        }
+    }
+
+    Colour opponentColour = (kingColour == Colour::White) ? Colour::Black : Colour::White;
+    return canTargetSquare(kingPos, opponentColour);
 }
 void Board::computeBoardState(Colour turn) {
     Coordinate::Coordinate whiteKingPos;
@@ -125,7 +140,7 @@ void Board::computeBoardState(Colour turn) {
         for (int j = 0; j < boardDimension; j++) {
             Piece* piece = board[i][j];
             if (piece != nullptr && piece->getColour() == turn) {
-                std::vector<Coordinate::Coordinate> validMoves = piece->getValidMoves(); //WARN!!! getValidMoves() does NOT consider CHECKS
+                std::vector<Coordinate::Coordinate> validMoves = piece->getValidMovesFiltered();
                 if (!validMoves.empty()) {
                     hasValidMoves = true;
                     break;
@@ -168,34 +183,35 @@ void Board::computeBoardState(Colour turn) {
 
 bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
     Piece* fromPiece = board[from.row][from.col];
-    std::unique_ptr<Piece> toPiece = nullptr;
+    std::unique_ptr<Piece> fromPieceOriginal;
+    std::unique_ptr<Piece> capturedPiece = nullptr;
     if (nullptr != board[to.row][to.col]) {
-        toPiece = board[to.row][to.col]->clone();
+        capturedPiece = board[to.row][to.col]->clone();
     }
 
     // First stage of checks: is there a piece at the from coordinate and is it the correct colour?
     if (nullptr == fromPiece || fromPiece->getColour() != col) {
         return false;
     }
+    fromPieceOriginal = fromPiece->clone();
 
     // Second stage of checks: can the piece make the move?
     if (!fromPiece->makeMove(to)) {
         return false;
     }
-    if (nullptr != board[to.row][to.col]) {
+    if (nullptr != board[to.row][to.col]) { //delete captured piece
         delete board[to.row][to.col];
     }
-    board[to.row][to.col] = fromPiece;
+    board[to.row][to.col] = board[from.row][from.col];
     board[from.row][from.col] = nullptr;
 
     // Third stage of checks: is the board state still valid after the move?
     computeBoardState(col);
     if ((col == Colour::White && boardState == WhiteChecked) || (col == Colour::Black && boardState == BlackChecked)) {
         // Undo move if player is still in check or have moved themselves into a check
-        board[from.row][from.col] = fromPiece;
-        if (nullptr != toPiece) {
-            board[to.row][to.col] = toPiece.release();
-        }
+        delete board[to.row][to.col]; //delete the moved piece
+        board[from.row][from.col] = fromPieceOriginal.release(); //replace with original piece
+        board[to.row][to.col] = capturedPiece ? capturedPiece.release() : nullptr;
         return false;
     }
 
@@ -219,16 +235,10 @@ bool Board::verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coor
     board[to.row][to.col] = fromPiece;
 
     //is the board state still valid after the move? (can not move into a check)
-    bool valid = true;
-    computeBoardState(fromPiece->getColour());
-    if ((fromPiece->getColour() == Colour::White && boardState == WhiteChecked) || (fromPiece->getColour() == Colour::Black && boardState == BlackChecked)) {
-        valid = false;
-    }
+    bool valid = !isKingInCheck(fromPiece->getColour());
 
     //undo move and return
-    if (nullptr != capturedPiece) {
-        board[to.row][to.col] = capturedPiece.release();
-    }
+    board[to.row][to.col] = capturedPiece ? capturedPiece.release() : nullptr;
     board[from.row][from.col] = fromPiece;
 
     return valid;

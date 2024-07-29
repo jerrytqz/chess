@@ -40,7 +40,8 @@ class Board {
         Piece*** board;
         int boardDimension;
         BoardState boardState;
-        bool canTargetSquare(Coordinate::Coordinate square, Colour colour); //can any of colour's piece target the square?
+        bool canTargetSquare(Coordinate::Coordinate square, Colour colour) const; //can any of colour's piece target the square?
+        bool isKingInCheck(Colour kingColour) const;
 };
 
 #endif
