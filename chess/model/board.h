@@ -26,6 +26,7 @@ class Board {
         int getBoardDimension() const;
         std::unique_ptr<Piece>** cloneBoard();
         bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
+        bool verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coordinate to); //called by Piece
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(std::string pieceCode, Coordinate::Coordinate pos);
         bool addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos);
@@ -39,6 +40,7 @@ class Board {
         Piece*** board;
         int boardDimension;
         BoardState boardState;
+        bool canTargetSquare(Coordinate::Coordinate square, Colour colour); //can any of colour's piece target the square?
 };
 
 #endif

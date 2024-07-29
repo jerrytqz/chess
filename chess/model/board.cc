@@ -85,9 +85,85 @@ std::unique_ptr<Piece>** Board::cloneBoard() {
     return clonedBoard;
 }
 
+bool Board::canTargetSquare(Coordinate::Coordinate square, Colour colour) { //private helper function for computeBoardState
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            if (board[i][j] && board[i][j]->getColour() == colour && board[i][j]->canTargetSquare(square)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 void Board::computeBoardState(Colour turn) {
-    //IMPLEMENTATION NOT DONE
-    boardState = BoardState::Default;
+    Coordinate::Coordinate whiteKingPos;
+    Coordinate::Coordinate blackKingPos;
+
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            Piece* piece = board[i][j];
+            if (piece != nullptr) {
+                if (piece->getPieceType() == Piece::PieceType::King) {
+                    if (piece->getColour() == Colour::White) {
+                        whiteKingPos = {i, j};
+                    } else {
+                        blackKingPos = {i, j};
+                    }
+                }
+            }
+        }
+    }
+
+    //check for check
+    bool whiteInCheck = canTargetSquare(whiteKingPos, Colour::Black);
+    bool blackInCheck = canTargetSquare(blackKingPos, Colour::White);
+
+    // does player have any valid moves?
+    //!_!_!_!_!_!_!_!__!!_!!!!___!!__!_!__!!__!_THIS SECTION OF CODE IS INCORRECT!!!
+    bool hasValidMoves = false;
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            Piece* piece = board[i][j];
+            if (piece != nullptr && piece->getColour() == turn) {
+                std::vector<Coordinate::Coordinate> validMoves = piece->getValidMoves(); //WARN!!! getValidMoves() does NOT consider CHECKS
+                if (!validMoves.empty()) {
+                    hasValidMoves = true;
+                    break;
+                }
+            }
+        }
+        if (hasValidMoves) break;
+    }
+
+    if (turn == Colour::White) {
+        if (whiteInCheck) {
+            if (hasValidMoves) {
+                boardState = BoardState::WhiteChecked;
+            } else {
+                boardState = BoardState::WhiteCheckmated;
+            }
+        } else {
+            if (hasValidMoves) {
+                boardState = BoardState::Default;
+            } else {
+                boardState = BoardState::Stalemate;
+            }
+        }
+    } else {
+        if (blackInCheck) {
+            if (hasValidMoves) {
+                boardState = BoardState::BlackChecked;
+            } else {
+                boardState = BoardState::BlackCheckmated;
+            }
+        } else {
+            if (hasValidMoves) {
+                boardState = BoardState::Default;
+            } else {
+                boardState = BoardState::Stalemate;
+            }
+        }
+    }
 }
 
 bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
@@ -124,6 +200,38 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     }
 
     return true;
+}
+
+//check to see if this move of Colour's piece will put Colour in check
+bool Board::verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coordinate to) {
+    Piece* fromPiece = board[from.row][from.col];
+    std::unique_ptr<Piece> capturedPiece = nullptr;
+    if (nullptr != board[to.row][to.col]) {
+        capturedPiece = board[to.row][to.col]->clone();
+    }
+
+    if (nullptr == fromPiece) {
+        return false;
+    }
+
+    //move the piece
+    board[from.row][from.col] = nullptr;
+    board[to.row][to.col] = fromPiece;
+
+    //is the board state still valid after the move? (can not move into a check)
+    bool valid = true;
+    computeBoardState(fromPiece->getColour());
+    if ((fromPiece->getColour() == Colour::White && boardState == WhiteChecked) || (fromPiece->getColour() == Colour::Black && boardState == BlackChecked)) {
+        valid = false;
+    }
+
+    //undo move and return
+    if (nullptr != capturedPiece) {
+        board[to.row][to.col] = capturedPiece.release();
+    }
+    board[from.row][from.col] = fromPiece;
+
+    return valid;
 }
 
 // bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {

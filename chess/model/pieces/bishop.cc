@@ -17,35 +17,30 @@ std::vector<Coordinate::Coordinate> Bishop::getValidMoves() const {
     for (const auto& dir : directions) {
         int dRow = dir.first;
         int dCol = dir.second;
-        for (int i = 1;; ++i) {
+        for (int i = 1;; i++) {
             Coordinate::Coordinate nextPos{position.row + i * dRow, position.col + i * dCol};
 
             if (!Coordinate::checkBounds(nextPos, board->getBoardDimension())) {
                 break; //unable to move in this direction (edge of board)
             }
 
-            if (board->getPiece(nextPos)) {
-                if (board->getPiece(nextPos)->getColour() != this->getColour()) {
-                    validMoves.push_back(nextPos); //capture piece
-                }
-                break; //stop moves in this direction
-            }
+            std::unique_ptr<Piece> targetPiece = board->getPiece(nextPos);
+            bool canCapture = targetPiece && targetPiece->getColour() != this->getColour();
+            bool canMove = !targetPiece || canCapture;
 
-            validMoves.push_back(nextPos); //empty square
+            if (canMove) {
+                validMoves.push_back(nextPos);
+
+                if (canCapture) {
+                    break; //stop moves in this direction after capturing a piece
+                }
+            } else {
+                break; //stop moves in this direction (blocked by a piece)
+            }
         }
     }
 
     return validMoves;
-}
-
-bool Bishop::canTargetSquare(Coordinate::Coordinate square) const {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
-        return false;
-    }
-    else {
-        return true;
-    }
 }
 
 bool Bishop::makeMove(Coordinate::Coordinate dest) {

@@ -15,7 +15,6 @@ public:
     virtual ~Queen() = default;
 
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    virtual bool canTargetSquare(Coordinate::Coordinate square) const override;
     virtual bool makeMove(Coordinate::Coordinate dest) override;
 };
 

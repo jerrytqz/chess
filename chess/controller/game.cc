@@ -86,6 +86,7 @@ void Game::setUp() { //this method interfaces with std::cout
 void Game::play() {
     gameInProgress = true;
     while (gameInProgress) {
+        notifyObservers();
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
                 ++blackScore;
@@ -117,7 +118,6 @@ void Game::play() {
         }
 
         currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
-        notifyObservers();
     }
 }
 

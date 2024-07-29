@@ -1,4 +1,5 @@
 #include "king.h"
+#include "../board.h"
 
 King::King(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::King, board}, hasMoved{false} {}
@@ -6,13 +7,33 @@ King::King(Coordinate::Coordinate position, Colour colour, Board* board):
 std::vector<Coordinate::Coordinate> King::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 
-    //MISSING IMPLEMENTATION
+    // Possible relative moves for a king
+    std::vector<std::pair<int, int>> directions = {{
+        {1, 0},
+        {1, 1},
+        {0, 1},
+        {-1, 1},
+        {-1, 0},
+        {-1, -1},
+        {0, -1},
+        {1, -1}
+    }};
+
+    for (const auto& dir : directions) {
+        Coordinate::Coordinate nextPos{position.row + dir.first, position.col + dir.second};
+
+        // Check if the move is within bounds and doesn't leave the king in check
+        if (Coordinate::checkBounds(nextPos, board->getBoardDimension())) {
+            std::unique_ptr<Piece> targetPiece = board->getPiece(nextPos);
+            bool canMove = !targetPiece || targetPiece->getColour() != this->getColour();
+
+            if (canMove) {
+                validMoves.push_back(nextPos);
+            }
+        }
+    }
 
     return validMoves;
-}
-
-bool King::canTargetSquare(Coordinate::Coordinate square) const {
-    // Implementation goes here
 }
 
 bool King::makeMove(Coordinate::Coordinate dest) {
