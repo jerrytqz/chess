@@ -51,7 +51,7 @@ void ComputerPlayer::levelOne() {
 
     int randPiece = rand() % myPieces.size();
 
-    std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMoves();
+    std::vector<Coordinate::Coordinate> validMoves = myPieces[randPiece]->getValidMovesFiltered();
 
     int randMove = rand() % validMoves.size();
 

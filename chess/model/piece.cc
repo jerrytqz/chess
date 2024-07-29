@@ -20,7 +20,7 @@ Colour Piece::getColour() const {
     return colour;
 }
 
-std::vector<Coordinate::Coordinate> Piece::getValidMovesFiltered() const {
+std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
     for (Coordinate::Coordinate nextPos : getValidMoves()) {
         if (board->verifyNoCheckAfterMove(position, nextPos)) {

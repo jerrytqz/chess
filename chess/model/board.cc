@@ -140,7 +140,7 @@ void Board::computeBoardState(Colour turn) {
         for (int j = 0; j < boardDimension; j++) {
             Piece* piece = board[i][j];
             if (piece != nullptr && piece->getColour() == turn) {
-                std::vector<Coordinate::Coordinate> validMoves = piece->getValidMovesFiltered();
+                std::vector<Coordinate::Coordinate> validMoves = piece->getValidLegalMoves();
                 if (!validMoves.empty()) {
                     hasValidMoves = true;
                     break;
