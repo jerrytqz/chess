@@ -39,17 +39,15 @@ std::vector<Coordinate::Coordinate> Pawn::getValidMoves() const {
 }
 
 bool Pawn::canTargetSquare(Coordinate::Coordinate square) const {
-    if (square.col == position.col) { //can not target from same column
-        return false;
-    }
+    int oneOffset = colour == Colour::White ? 1 : -1;
 
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
-        return false;
-    }
-    else {
+    Coordinate::Coordinate r{position.row + oneOffset, position.col + oneOffset}; // Diagonal right
+    Coordinate::Coordinate l{position.row + oneOffset, position.col - oneOffset}; // Diagonal left
+
+    if (square == r || square == l)
         return true;
-    }
+
+    return false;
 }
 
 void Pawn::adjustAfterMove(Coordinate::Coordinate dest) {
