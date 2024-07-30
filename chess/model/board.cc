@@ -52,6 +52,13 @@ Board::~Board() {
         delete[] board[i];
     }
     delete[] board;
+    while (!moveHistories.empty()) {
+        History lastMove = moveHistories.top();
+        delete lastMove.oldPiece;
+        delete lastMove.newPiece;
+        delete lastMove.takenPiece;
+        moveHistories.pop();
+    }
 }
 
 Board::BoardState Board::getBoardState() const {
@@ -196,12 +203,9 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     // Third step: add move to history
     moveHistories.push(
-        History{
-            std::make_pair(std::string(1, oldPiece->toChar()), oldPiece->getPosition()),
-            std::make_pair(std::string(1, newPiece->toChar()), newPiece->getPosition()),
-            capturedPiece ? std::make_pair(std::string(1, capturedPiece->toChar()), capturedPiece->getPosition()) : std::make_pair("", Coordinate::Coordinate{-1, -1})
-        }
+        History{oldPiece.release(), newPiece.release(), capturedPiece.release()}
     );
+
 
     // Fourth step: has player moved into check?
     if (isKingInCheck(col)) {
@@ -218,19 +222,21 @@ void Board::undoTurn() {
     }
 
     History lastMove = moveHistories.top();
-
-    std::pair<std::string, Coordinate::Coordinate> oldPiece = lastMove.oldPiece;
-    std::pair<std::string, Coordinate::Coordinate> newPiece = lastMove.newPiece;
-    std::pair<std::string, Coordinate::Coordinate> capturedPiece = lastMove.capturedPiece;
+    Coordinate::Coordinate oldPosition = lastMove.oldPiece->getPosition();
+    Coordinate::Coordinate newPosition = lastMove.newPiece->getPosition();
 
     //delete new piece
-    removePiece(newPiece.second);
+    delete board[newPosition.row][newPosition.col];
+    board[newPosition.row][newPosition.col] = nullptr;
+    delete lastMove.newPiece;
 
     //restore old piece
-    addPiece(oldPiece.first, oldPiece.second);
+    board[oldPosition.row][oldPosition.col] = lastMove.oldPiece;
 
     //restore captured piece if there is one
-    addPiece(capturedPiece.first, capturedPiece.second);
+    if (nullptr != lastMove.takenPiece) {
+        board[lastMove.takenPiece->getPosition().row][lastMove.takenPiece->getPosition().col] = lastMove.takenPiece;
+    }
 
     moveHistories.pop();
 }
@@ -248,6 +254,7 @@ bool Board::verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coor
     }
 
     //move the piece
+    delete board[to.row][to.col];
     board[from.row][from.col] = nullptr;
     board[to.row][to.col] = fromPiece;
 
