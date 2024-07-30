@@ -54,13 +54,12 @@ bool ComputerPlayer::takeTurn() {
 }
 
 bool ComputerPlayer::levelOne() {
-    std::unique_ptr<Piece> **pieces = board->cloneBoard();
     std::vector<std::unique_ptr<Piece>> myPieces {};
 
     for (int i = 0; i < board->getBoardDimension(); ++i) {
         for (int j = 0; j < board->getBoardDimension(); ++j) {
-            if (pieces[i][j] != nullptr && pieces[i][j]->getColour() == colour) {
-                myPieces.push_back(std::move(pieces[i][j]));
+            if (board->getPiece(i, j) != nullptr && board->getPiece(i, j)->getColour() == colour) {
+                myPieces.push_back(std::move(board->getPiece(i, j)));
             }
         }
     }
@@ -91,13 +90,19 @@ bool ComputerPlayer::levelOne() {
 }
 
 bool ComputerPlayer::levelTwo() {
-    std::unique_ptr<Piece> **pieces = board->cloneBoard();
     std::vector<std::unique_ptr<Piece>> myPieces {};
+
+    Coordinate::Coordinate enemyKingPos;
 
     for (int i = 0; i < board->getBoardDimension(); ++i) {
         for (int j = 0; j < board->getBoardDimension(); ++j) {
-            if (pieces[i][j] != nullptr && pieces[i][j]->getColour() == colour) {
-                myPieces.push_back(std::move(pieces[i][j]));
+            if (board->getPiece(i, j) != nullptr) {
+                if (board->getPiece(i, j)->getColour() == colour) {
+                    myPieces.push_back(std::move(board->getPiece(i, j)));
+                }
+                else if (board->getPiece(i, j)->getColour() != colour && board->getPiece(i, j)->getPieceType() == Piece::PieceType::King) {
+                    enemyKingPos = board->getPiece(i, j)->getPosition();
+                }
             }
         }
     }
@@ -109,7 +114,11 @@ bool ComputerPlayer::levelTwo() {
 
         for (auto& coord : validMoves) {
             std::unique_ptr<Piece> enemy = board->getPiece(coord);
-            moves.push_back(ChessMove{piece->getPosition(), coord, (enemy == nullptr ? 0 : enemy->getValue())});
+
+            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) ? 8 : 0;
+            int takePoints = enemy == nullptr ? 0 : enemy->getValue();
+
+            moves.push_back(ChessMove{piece->getPosition(), coord, checkBonus + takePoints});
         }
     }
 

@@ -6,8 +6,10 @@
 #include "./pieces/queen.h"
 #include "./pieces/king.h"
 #include "../shared/colour.h"
+#include "../shared/coordinate.h"
 
 #include <cctype>
+#include <string>
 
 Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
@@ -68,6 +70,14 @@ std::unique_ptr<Piece> Board::getPiece(Coordinate::Coordinate pos) const {
         return nullptr;
     }
     return board[pos.row][pos.col]->clone();
+}
+
+std::unique_ptr<Piece> Board::getPiece(int x, int y) const {
+    return getPiece(Coordinate::Coordinate{x, y});
+}
+
+std::unique_ptr<Piece> Board::getPiece(std::string pos) const {
+    return getPiece(Coordinate::chessToCartesian(pos));
 }
 
 int Board::getBoardDimension() const {

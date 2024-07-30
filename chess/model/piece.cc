@@ -26,6 +26,7 @@ int Piece::getValue() const {
     if (pieceType == Piece::PieceType::Bishop) return 3;
     if (pieceType == Piece::PieceType::Knight) return 3;
     if (pieceType == Piece::PieceType::Pawn) return 1;
+    return 0;
 }
 
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
@@ -46,4 +47,12 @@ bool Piece::canTargetSquare(Coordinate::Coordinate square) const {
     else {
         return true;
     }
+}
+
+bool Piece::canTargetSquareFrom(Coordinate::Coordinate from, Coordinate::Coordinate square) {
+    Coordinate::Coordinate og_pos = position;
+    position = from;
+    bool canTarget = Piece::canTargetSquare(square);
+    position = og_pos;
+    return canTarget;
 }

@@ -35,6 +35,7 @@ public:
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const = 0; //does not check if move will put Colour in check
     std::vector<Coordinate::Coordinate> getValidLegalMoves() const; //uses virtual method getValidMoves()
     virtual bool canTargetSquare(Coordinate::Coordinate square) const; //uses virtual method getValidMoves()
+    virtual bool canTargetSquareFrom(Coordinate::Coordinate from, Coordinate::Coordinate square); //uses virtual method canTargetSquare()
     virtual bool makeMove(Coordinate::Coordinate dest) = 0;
 protected:
     Coordinate::Coordinate position;
