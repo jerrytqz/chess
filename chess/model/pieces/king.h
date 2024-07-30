@@ -16,7 +16,7 @@ public:
     ~King() = default;
 
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    bool makeMove(Coordinate::Coordinate dest) override;
+    void adjustAfterMove(Coordinate::Coordinate dest) override;
 };
 
 #endif

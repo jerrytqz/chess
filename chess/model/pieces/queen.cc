@@ -50,14 +50,3 @@ std::vector<Coordinate::Coordinate> Queen::getValidMoves() const {
 
     return validMoves;
 }
-
-bool Queen::makeMove(Coordinate::Coordinate dest) {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
-        return false;
-    }
-
-    position = dest;
-    
-    return true;
-}

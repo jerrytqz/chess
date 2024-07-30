@@ -39,14 +39,3 @@ std::vector<Coordinate::Coordinate> Knight::getValidMoves() const {
 
     return validMoves;
 }
-
-bool Knight::makeMove(Coordinate::Coordinate dest) {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
-        return false;
-    }
-
-    position = dest;
-    
-    return true;
-}
