@@ -52,15 +52,7 @@ bool Pawn::canTargetSquare(Coordinate::Coordinate square) const {
     }
 }
 
-bool Pawn::makeMove(Coordinate::Coordinate dest) {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
-        return false;
-    }
-
+void Pawn::adjustAfterMove(Coordinate::Coordinate dest) {
     hasMoved = true;
     justMovedTwice = std::abs(dest.row - position.row) == 2;
-    position = dest;
-    
-    return true;
 }

@@ -20,6 +20,22 @@ Colour Piece::getColour() const {
     return colour;
 }
 
+bool Piece::makeMove(Coordinate::Coordinate dest, bool simulate) {
+    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
+        return false;
+    }
+
+    position = dest;
+    adjustAfterMove(dest);
+
+    return true;
+}
+
+void Piece::adjustAfterMove(Coordinate::Coordinate) {
+    return;
+}
+
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
     std::vector<Coordinate::Coordinate> validLegalMoves;
     for (Coordinate::Coordinate nextPos : getValidMoves()) {
