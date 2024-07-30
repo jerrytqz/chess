@@ -32,6 +32,48 @@ bool HumanPlayer::takeTurn() {
                 std::cout << "Invalid move, try again: ";
                 continue;
             }
+
+            if (
+                board->getPiece(to)->getPieceType() == Piece::PieceType::Pawn &&
+                ((colour == Colour::White && Coordinate::chessToCartesian(to).row == 7) || (colour == Colour::Black && Coordinate::chessToCartesian(to).row == 0))
+            ) {
+                while (true) {
+                    std::string type;
+                    Piece::PieceType newPieceType;
+
+                    std::cin >> type;
+
+                    if (type.size() != 1) {
+                        std::cout << "invalid pormotion, try again" << std::endl;
+                        continue;
+                    }
+
+                    if (type[0] >= 'A')
+                        type[0] = type[0] - 'A' + 'a';
+
+                    if (type[0] == 'r') {
+                        newPieceType = Piece::PieceType::Rook;
+                    }
+                    else if (type[0] == 'n') {
+                        newPieceType = Piece::PieceType::Knight;
+                    }
+                    else if (type[0] == 'b') {
+                        newPieceType = Piece::PieceType::Bishop;
+                    }
+                    else if (type[0] == 'q') {
+                        newPieceType = Piece::PieceType::Queen;
+                    }
+                    else {
+                        std::cout << "invalid pormotion, try again" << std::endl;
+                        continue;
+                    }
+
+                    if (board->promote(Coordinate::chessToCartesian(to), newPieceType, colour))
+                        break;
+                    else
+                        std::cout << "invalid pormotion, try again" << std::endl;
+                }
+            }
             
             return true;
         }

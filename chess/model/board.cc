@@ -11,7 +11,7 @@
 #include <cctype>
 #include <string>
 
-Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default} {
+Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimension{boardDimension}, boardState{Default}, turnNumber{0} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
     for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
         board[i] = new Piece*[boardDimension]{0};
@@ -20,7 +20,7 @@ Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimen
     resetDefaultChess();
 }
 
-Board::Board(const Board& other): board{new Piece**[other.boardDimension]}, boardDimension{other.boardDimension}, boardState{other.boardState} {
+Board::Board(const Board& other): board{new Piece**[other.boardDimension]}, boardDimension{other.boardDimension}, boardState{other.boardState}, turnNumber{0} {
     //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
     for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
         board[i] = new Piece*[boardDimension]{0};
@@ -188,7 +188,7 @@ void Board::computeBoardState(Colour turn) {
     }
 }
 
-bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col, bool simulate) {
+bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col, bool simulate, bool incrementTurn) {
     // First step: is there a piece at the from coordinate and is it the correct colour?
     Piece* fromPiece = board[from.row][from.col];
     if (nullptr == fromPiece || fromPiece->getColour() != col) {
@@ -211,7 +211,7 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     // Third step: add move to history
     moveHistories.push(
-        History{fromPiece, newPiece.release(), capturedPiece.release()}
+        History{fromPiece, newPiece.release(), capturedPiece.release(), turnNumber - (incrementTurn ? 0 : 1)}
     );
 
     // Fourth step: has player moved into check?
@@ -223,37 +223,65 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     if (simulate) {
         undoTurn();
     }
+
+    if (incrementTurn) {
+        ++turnNumber;
+    }
+
     return true;
 }
 
 void Board::undoTurn() {
-    if (moveHistories.empty()) {
+ if (moveHistories.empty()) {
         return;
     }
 
-    History lastMove = moveHistories.top();
-    Coordinate::Coordinate oldPosition = lastMove.oldPiece->getPosition();
-    Coordinate::Coordinate newPosition = lastMove.newPiece->getPosition();
+    int lastTurn = moveHistories.top().turnNumber;
 
-    //delete new piece
-    delete board[newPosition.row][newPosition.col];
-    board[newPosition.row][newPosition.col] = nullptr;
-    delete lastMove.newPiece;
+    while (!moveHistories.empty()) {
+        if (moveHistories.top().turnNumber != lastTurn)
+            break;
 
-    //restore old piece
-    board[oldPosition.row][oldPosition.col] = lastMove.oldPiece;
+        History lastMove = moveHistories.top();
 
-    //restore captured piece if there is one
-    if (nullptr != lastMove.capturedPiece) {
-        board[lastMove.capturedPiece->getPosition().row][lastMove.capturedPiece->getPosition().col] = lastMove.capturedPiece;
+        Coordinate::Coordinate oldPosition = lastMove.oldPiece->getPosition();
+        Coordinate::Coordinate newPosition = lastMove.newPiece->getPosition();
+
+        //delete new piece
+        delete board[newPosition.row][newPosition.col];
+        board[newPosition.row][newPosition.col] = nullptr;
+        delete lastMove.newPiece;
+
+        //restore old piece
+        board[oldPosition.row][oldPosition.col] = lastMove.oldPiece;
+
+        //restore captured piece if there is one
+        if (nullptr != lastMove.capturedPiece) {
+            board[lastMove.capturedPiece->getPosition().row][lastMove.capturedPiece->getPosition().col] = lastMove.capturedPiece;
+        }
+
+        moveHistories.pop();
     }
 
-    moveHistories.pop();
+    turnNumber = moveHistories.empty() ? 0 : moveHistories.top().turnNumber + 1;
 }
 
-// bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {
+bool Board::promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col) {
+    Piece* piece = board[pos.row][pos.col];
+    if (nullptr == piece || piece->getColour() != col || piece->getPieceType() != Piece::PieceType::Pawn ||
+        pieceType == Piece::PieceType::King || pieceType == Piece::PieceType::Pawn) {
+        return false;
+    }
 
-// }
+    if ((col == Colour::White && pos.row == 7) || (col == Colour::Black && pos.row == 0)) {
+        Piece *oldPiece = piece->clone().release();
+        addPiece(col, pieceType, pos);
+        Piece *newPiece = board[pos.row][pos.col]->clone().release();
+        moveHistories.push(History{oldPiece, newPiece, nullptr, turnNumber - 1});
+    }
+
+    return true;
+}
 
 bool Board::addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos) {
     //check if piece is in bounds

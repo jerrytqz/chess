@@ -47,3 +47,9 @@ std::vector<Coordinate::Coordinate> Rook::getValidMoves() const {
 void Rook::adjustAfterMove(Coordinate::Coordinate) {
     hasMoved = true;
 }
+
+int Rook::getMovementData() {
+    if (hasMoved)
+        return 1;
+    return 0;
+}

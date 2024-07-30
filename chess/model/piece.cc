@@ -34,14 +34,18 @@ bool Piece::makeMove(Coordinate::Coordinate dest, bool simulate) {
         }
     }
 
-    position = dest;
     adjustAfterMove(dest);
+    position = dest;
 
     return true;
 }
 
 void Piece::adjustAfterMove(Coordinate::Coordinate) {
     return;
+}
+
+int Piece::getMovementData() {
+    return 0;
 }
 
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
