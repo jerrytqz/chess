@@ -115,7 +115,7 @@ bool ComputerPlayer::levelTwo() {
         for (auto& coord : validMoves) {
             std::unique_ptr<Piece> enemy = board->getPiece(coord);
 
-            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) ? 8 : 0;
+            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) ? 3 : 0;
             int takePoints = enemy == nullptr ? 0 : enemy->toValue();
 
             moves.push_back(ChessMove{piece->getPosition(), coord, checkBonus + takePoints});
@@ -187,7 +187,7 @@ bool ComputerPlayer::levelThree() {
             bool inDanger = dangerZones[pos.row * board->getBoardDimension() + pos.col];
             bool willBeInDanger = dangerZones[coord.row * board->getBoardDimension() + coord.col];
 
-            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) && !willBeInDanger ? 8 : 0;
+            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) && !willBeInDanger ? 3 : 0;
             int takePoints = enemy == nullptr ? 0 : enemy->toValue();
             int escOrTrade = inDanger == true && willBeInDanger == false ? piece->toValue() :
                 (inDanger == false && willBeInDanger == true ? -piece->toValue() : 0);
@@ -218,5 +218,44 @@ bool ComputerPlayer::levelThree() {
 }
 
 bool ComputerPlayer::levelFour() {
-    return false;
+    std::vector<std::unique_ptr<Piece>> myPieces {};
+
+    for (int i = 0; i < board->getBoardDimension(); ++i) {
+        for (int j = 0; j < board->getBoardDimension(); ++j) {
+            if (board->getPiece(i, j) != nullptr) {
+                if (board->getPiece(i, j)->getColour() == colour)
+                    myPieces.push_back(std::move(board->getPiece(i, j)));
+            }
+        }
+    }
+    
+    std::vector<ChessMove> legalMoves{};
+
+    for (auto& piece : myPieces) {
+        std::vector<Coordinate::Coordinate> validMoves = piece->getValidLegalMoves();
+        for (auto& coord : validMoves) {
+            legalMoves.push_back(ChessMove{piece->getPosition(), coord, 0});
+        }
+    }
+
+    Board *testBoard = new Board{*board};
+
+    int max = std::numeric_limits<int>::min();
+    ChessMove maxMove{};
+
+    for (auto chessMove : legalMoves) {
+        testBoard->takeTurn(chessMove.from, chessMove.to, colour);
+        int score = minimax(testBoard, 1, true);
+        if (score > max) {
+            max = score;
+            maxMove = chessMove;
+        }
+        testBoard->undoTurn();
+    }
+
+    board->takeTurn(maxMove.from, maxMove.to, colour);
+
+    delete testBoard;
+
+    return true;
 }
