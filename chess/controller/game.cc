@@ -97,34 +97,43 @@ void Game::play() {
     while (gameInProgress) {
         notifyObservers();
 
-        //make a move
+        bool hasEnded = false;
+
+        //make a move (DETECT RESIGN)
         if (currentTurn == Colour::White) {
-            whitePlayer->takeTurn();
+            if (!whitePlayer->takeTurn()) {
+                ++blackScore;
+                std::cout << "Black wins!\n";
+                hasEnded = true;
+            }
         } else {
-            blackPlayer->takeTurn();
+            if (!blackPlayer->takeTurn()) {
+                ++whiteScore;
+                std::cout << "White wins!\n";
+                hasEnded = true;
+            }
         }
 
         //next turn and recompute boardState
         currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
-        bool hasEnded = false;
         board->computeBoardState(currentTurn);
         if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
             ++blackScore;
-            gameInProgress = false;
             hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
             ++whiteScore;
-            gameInProgress = false;
             hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::Stalemate) {
             whiteScore += 0.5;
             blackScore += 0.5;
-            gameInProgress = false;
+        
             hasEnded = true;
         }
 
         if (hasEnded) {
+            gameInProgress = false;
             notifyObservers();
+            board->resetDefaultChess();
             return;
         }
     }

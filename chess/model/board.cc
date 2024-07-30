@@ -17,31 +17,7 @@ Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimen
         board[i] = new Piece*[boardDimension]{0};
     }
 
-    //if board dimension is 8 initialize with default chessboard
-    if (boardDimension == 8) {
-        for (int j = 0; j < 8; j++) { //pawns
-            addPiece(Colour::White, Piece::PieceType::Pawn, Coordinate::Coordinate{1, j});
-            addPiece(Colour::Black, Piece::PieceType::Pawn, Coordinate::Coordinate{6, j});
-        }
-
-        const std::vector<Piece::PieceType> pieceOrder = {
-            Piece::PieceType::Rook, Piece::PieceType::Knight, Piece::PieceType::Bishop, Piece::PieceType::Queen, Piece::PieceType::King
-        };
-
-        for (int j = 0; j < pieceOrder.size(); j++) {
-            //initialize white pieces
-            addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, j});
-            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
-                addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, 7 - j});
-            }
-
-            //initialize black pieces
-            addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, j});
-            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
-                addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, 7 - j});
-            }
-        }
-    }
+    resetDefaultChess();
 }
 
 Board::~Board() {
@@ -368,6 +344,34 @@ bool Board::verifyBoard(Colour currentTurn) {
     }
 
     return true;
+}
+
+void Board::resetDefaultChess() {
+    //if board dimension is 8 initialize with default chessboard
+    if (boardDimension == 8) {
+        for (int j = 0; j < 8; j++) { //pawns
+            addPiece(Colour::White, Piece::PieceType::Pawn, Coordinate::Coordinate{1, j});
+            addPiece(Colour::Black, Piece::PieceType::Pawn, Coordinate::Coordinate{6, j});
+        }
+
+        const std::vector<Piece::PieceType> pieceOrder = {
+            Piece::PieceType::Rook, Piece::PieceType::Knight, Piece::PieceType::Bishop, Piece::PieceType::Queen, Piece::PieceType::King
+        };
+
+        for (int j = 0; j < pieceOrder.size(); j++) {
+            //initialize white pieces
+            addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, j});
+            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
+                addPiece(Colour::White, pieceOrder[j], Coordinate::Coordinate{0, 7 - j});
+            }
+
+            //initialize black pieces
+            addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, j});
+            if (pieceOrder[j] != Piece::PieceType::Queen && pieceOrder[j] != Piece::PieceType::King) {
+                addPiece(Colour::Black, pieceOrder[j], Coordinate::Coordinate{7, 7 - j});
+            }
+        }
+    }
 }
 
 void Board::reset() {

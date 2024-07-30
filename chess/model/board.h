@@ -37,6 +37,7 @@ class Board {
         bool addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos);
         bool removePiece(Coordinate::Coordinate pos);
         bool verifyBoard(Colour currentTurn); //called by Game during setup
+        void resetDefaultChess();
         void reset(); //called by Game during setup
 
     protected:
