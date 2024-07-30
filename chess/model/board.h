@@ -5,6 +5,7 @@
 #include "../shared/coordinate.h"
 #include "../shared/colour.h"
 #include <memory>
+#include <stack>
 
 class Board {
     public:
@@ -26,6 +27,7 @@ class Board {
         int getBoardDimension() const;
         std::unique_ptr<Piece>** cloneBoard();
         bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
+        void undoTurn();
         bool verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coordinate to); //called by Piece
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(std::string pieceCode, Coordinate::Coordinate pos);
@@ -37,9 +39,16 @@ class Board {
     protected:
 
     private:
+        struct History {
+            Piece* oldPiece;
+            Piece* newPiece;
+            Piece* takenPiece;
+        };
+
         Piece*** board;
         int boardDimension;
         BoardState boardState;
+        std::stack<History> moveHistories;
         bool canTargetSquare(Coordinate::Coordinate square, Colour colour) const; //can any of colour's piece target the square?
         bool isKingInCheck(Colour kingColour) const;
 };
