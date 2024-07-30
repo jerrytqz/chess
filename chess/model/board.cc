@@ -338,8 +338,7 @@ bool Board::verifyBoard(Colour currentTurn) {
     }
 
     //neither king is in check
-    computeBoardState(currentTurn);
-    if (boardState != BoardState::Default && boardState != BoardState::Stalemate) {
+    if (isKingInCheck(Colour::Black) || isKingInCheck(Colour::White)) {
         return false;
     }
 

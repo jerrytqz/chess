@@ -126,7 +126,6 @@ void Game::play() {
         } else if (board->getBoardState() == Board::BoardState::Stalemate) {
             whiteScore += 0.5;
             blackScore += 0.5;
-        
             hasEnded = true;
         }
 
