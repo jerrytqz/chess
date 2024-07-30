@@ -7,6 +7,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <utility>
 
 class Board {
     public:
@@ -43,9 +44,9 @@ class Board {
 
     private:
         struct History {
-            Piece* oldPiece;
-            Piece* newPiece;
-            Piece* takenPiece;
+            std::pair<std::string, Coordinate::Coordinate> oldPiece;
+            std::pair<std::string, Coordinate::Coordinate> newPiece;
+            std::pair<std::string, Coordinate::Coordinate> capturedPiece;
         };
 
         Piece*** board;

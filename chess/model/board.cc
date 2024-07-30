@@ -52,13 +52,6 @@ Board::~Board() {
         delete[] board[i];
     }
     delete[] board;
-    while (!moveHistories.empty()) {
-        History lastMove = moveHistories.top();
-        delete lastMove.oldPiece;
-        delete lastMove.newPiece;
-        delete lastMove.takenPiece;
-        moveHistories.pop();
-    }
 }
 
 Board::BoardState Board::getBoardState() const {
@@ -203,7 +196,11 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     // Third step: add move to history
     moveHistories.push(
-        History{oldPiece.release(), newPiece.release(), capturedPiece.release()}
+        History{
+            std::make_pair(std::string(1, oldPiece->toChar()), oldPiece->getPosition()),
+            std::make_pair(std::string(1, newPiece->toChar()), newPiece->getPosition()),
+            capturedPiece ? std::make_pair(std::string(1, capturedPiece->toChar()), capturedPiece->getPosition()) : std::make_pair("", Coordinate::Coordinate{-1, -1})
+        }
     );
 
     // Fourth step: has player moved into check?
@@ -221,21 +218,19 @@ void Board::undoTurn() {
     }
 
     History lastMove = moveHistories.top();
-    Coordinate::Coordinate oldPosition = lastMove.oldPiece->getPosition();
-    Coordinate::Coordinate newPosition = lastMove.newPiece->getPosition();
+
+    std::pair<std::string, Coordinate::Coordinate> oldPiece = lastMove.oldPiece;
+    std::pair<std::string, Coordinate::Coordinate> newPiece = lastMove.newPiece;
+    std::pair<std::string, Coordinate::Coordinate> capturedPiece = lastMove.capturedPiece;
 
     //delete new piece
-    delete board[newPosition.row][newPosition.col];
-    board[newPosition.row][newPosition.col] = nullptr;
-    delete lastMove.newPiece;
+    removePiece(newPiece.second);
 
     //restore old piece
-    board[oldPosition.row][oldPosition.col] = lastMove.oldPiece;
+    addPiece(oldPiece.first, oldPiece.second);
 
     //restore captured piece if there is one
-    if (nullptr != lastMove.takenPiece) {
-        board[lastMove.takenPiece->getPosition().row][lastMove.takenPiece->getPosition().col] = lastMove.takenPiece;
-    }
+    addPiece(capturedPiece.first, capturedPiece.second);
 
     moveHistories.pop();
 }
