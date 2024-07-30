@@ -44,9 +44,9 @@ class Board {
 
     private:
         struct History {
-            std::pair<std::string, Coordinate::Coordinate> oldPiece;
-            std::pair<std::string, Coordinate::Coordinate> newPiece;
-            std::pair<std::string, Coordinate::Coordinate> capturedPiece;
+            Piece* oldPiece;
+            Piece* newPiece;
+            Piece* takenPiece;
         };
 
         Piece*** board;

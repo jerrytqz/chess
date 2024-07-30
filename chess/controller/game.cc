@@ -131,18 +131,26 @@ void Game::play() {
     }
 }
 
-void Game::updatePlayer(Colour colour, Player* player) {
+void Game::updatePlayer(Colour colour, Player::PlayerType playerType, int computerLevel) {
+    Player* newPlayer;
+    if (playerType == Player::PlayerType::Human) {
+        newPlayer = new HumanPlayer{board, colour};
+    }
+    else {
+        newPlayer = new ComputerPlayer{board, colour, computerLevel};
+    }
+
     if (colour == Colour::Black) {
         if (blackPlayer) {
             delete blackPlayer;
         }
-        blackPlayer = player;
+        blackPlayer = newPlayer;
     }
     else { //replace white player
         if (whitePlayer) {
             delete whitePlayer;
         }
-        whitePlayer = player;
+        whitePlayer = newPlayer;
     }
 }
 

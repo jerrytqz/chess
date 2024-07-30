@@ -16,7 +16,6 @@ public:
     ~Knight() = default;
 
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    bool makeMove(Coordinate::Coordinate dest) override;
 };
 
 #endif

@@ -37,14 +37,6 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
     return validMoves;
 }
 
-bool King::makeMove(Coordinate::Coordinate dest) {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
-        return false;
-    }
-
+void King::adjustAfterMove(Coordinate::Coordinate) {
     hasMoved = true;
-    position = dest;
-    
-    return true;
 }

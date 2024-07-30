@@ -29,7 +29,7 @@ class Game {
 
         void setUp();
         void play();
-        void updatePlayer(Colour colour, Player* player);
+        void updatePlayer(Colour colour, Player::PlayerType playerType, int computerLevel = 1);
         void detachObserver(Observer* obs);
         void attachObserver(Observer* obs);
         GameState getGameState();
