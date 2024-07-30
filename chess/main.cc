@@ -7,12 +7,12 @@ int main() {
     Game game{
         new Board{8}, 
         Player::PlayerType::Human,
-        Player::PlayerType::Human
+        Player::PlayerType::Computer
     };
 
     Observer* textObs = new TextObserver{&game};
 
-    game.setUp();
+    // game.setUp();
 
     game.play();
 

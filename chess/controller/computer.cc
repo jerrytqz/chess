@@ -144,6 +144,76 @@ bool ComputerPlayer::levelTwo() {
 }
 
 bool ComputerPlayer::levelThree() {
+    std::vector<std::unique_ptr<Piece>> myPieces {};
+    std::vector<std::unique_ptr<Piece>> enemyPieces {};
+
+    Coordinate::Coordinate enemyKingPos;
+
+    for (int i = 0; i < board->getBoardDimension(); ++i) {
+        for (int j = 0; j < board->getBoardDimension(); ++j) {
+            if (board->getPiece(i, j) != nullptr) {
+                if (board->getPiece(i, j)->getColour() == colour) {
+                    myPieces.push_back(std::move(board->getPiece(i, j)));
+                }
+                else {
+                    if (board->getPiece(i, j)->getPieceType() == Piece::PieceType::King) {
+                        enemyKingPos = board->getPiece(i, j)->getPosition();
+                    }
+                    enemyPieces.push_back(std::move(board->getPiece(i, j)));
+                }
+            }
+        }
+    }
+
+    bool* dangerZones = new bool[board->getBoardDimension() * board->getBoardDimension()];
+    std::fill(dangerZones, dangerZones + (board->getBoardDimension() * board->getBoardDimension()), false);
+
+    for (auto& enemy : enemyPieces) {
+        std::vector<Coordinate::Coordinate> enemyMoves = enemy->getValidLegalMoves();
+
+        for (auto& danger : enemyMoves) {
+            dangerZones[danger.row * board->getBoardDimension() + danger.col] = true;
+        }
+    }
+
+    std::vector<ChessMove> moves = {};
+
+    for (auto& piece : myPieces) {
+        std::vector<Coordinate::Coordinate> validMoves = piece->getValidLegalMoves();
+
+        for (auto& coord : validMoves) {
+            std::unique_ptr<Piece> enemy = board->getPiece(coord);
+            Coordinate::Coordinate pos = piece->getPosition();
+            bool inDanger = dangerZones[pos.row * board->getBoardDimension() + pos.col];
+            bool willBeInDanger = dangerZones[coord.row * board->getBoardDimension() + coord.col];
+
+            int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) && !willBeInDanger ? 8 : 0;
+            int takePoints = enemy == nullptr ? 0 : enemy->toValue();
+            int escOrTrade = inDanger == true && willBeInDanger == false ? piece->toValue() :
+                (inDanger == false && willBeInDanger == true ? -piece->toValue() : 0);
+
+            moves.push_back(ChessMove{piece->getPosition(), coord, checkBonus + takePoints + escOrTrade});
+        }
+    }
+
+    std::shuffle(moves.begin(), moves.end(), rng);
+
+    std::sort(moves.begin(), moves.end(), [](const ChessMove& a, const ChessMove& b) {
+        return a.point < b.point;
+    });
+
+    while (moves.size() > 0) {
+        bool turnTaken = board->takeTurn(moves.back().from, moves.back().to, colour);
+
+        std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
+            << Coordinate::cartesianToChess(moves.back().to) << std::endl;
+
+        if (turnTaken)
+            return true;
+
+        moves.pop_back();
+    }
+
     return false;
 }
 
