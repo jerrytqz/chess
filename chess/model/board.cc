@@ -123,7 +123,25 @@ void Board::computeBoardState(Colour turn) {
     bool whiteInCheck = isKingInCheck(Colour::White);
     bool blackInCheck = isKingInCheck(Colour::Black);
 
-    // does player have any valid moves?
+    //check if the only pieces on the board are 2 kings
+    bool justKings = true;
+    for (int i = 0; i < boardDimension; i++) {
+        for (int j = 0; j < boardDimension; j++) {
+            if (board[i][j] && board[i][j]->getPieceType() != Piece::PieceType::King) {
+                justKings = false;
+                break;
+            }
+        }
+        if (!justKings) {
+            break;
+        }
+    }
+    if (justKings) {
+        boardState = BoardState::Stalemate;
+        return;
+    }
+
+    //does player have any valid moves?
     bool hasValidMoves = false;
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
