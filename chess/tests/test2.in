@@ -1,9 +1,11 @@
+setup
 + K e5
 + k e3
 + Q a1
 + q a2
 + p f5
 done
+game human human
 move a1 f1
 move a2 a5
 move e5 f5
