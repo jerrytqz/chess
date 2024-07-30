@@ -27,9 +27,11 @@ Colour Piece::getColour() const {
 }
 
 bool Piece::makeMove(Coordinate::Coordinate dest, bool simulate) {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
-        return false;
+    if (!simulate) {
+        std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+        if (std::find(validMoves.begin(), validMoves.end(), dest) == validMoves.end()) {
+            return false;
+        }
     }
 
     position = dest;
@@ -45,7 +47,7 @@ void Piece::adjustAfterMove(Coordinate::Coordinate) {
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
     std::vector<Coordinate::Coordinate> validLegalMoves;
     for (Coordinate::Coordinate nextPos : getValidMoves()) {
-        if (board->verifyNoCheckAfterMove(position, nextPos)) {
+        if (board->takeTurn(position, nextPos, colour, true)) {
             validLegalMoves.push_back(nextPos);
         }
     }

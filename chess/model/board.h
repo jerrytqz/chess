@@ -31,14 +31,14 @@ class Board {
         std::unique_ptr<Piece> getPiece(std::string pos) const;
         int getBoardDimension() const;
         std::unique_ptr<Piece>** cloneBoard();
-        bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col);
+        bool takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col, bool simulate = false);
         void undoTurn();
-        bool verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coordinate to); //called by Piece
         bool promote(Coordinate::Coordinate pos, Piece::PieceType pieceType, Colour col);
         bool addPiece(std::string pieceCode, Coordinate::Coordinate pos);
         bool addPiece(Colour colour, Piece::PieceType type, Coordinate::Coordinate pos);
         bool removePiece(Coordinate::Coordinate pos);
         bool verifyBoard(Colour currentTurn); //called by Game during setup
+        void resetDefaultChess();
         void reset(); //called by Game during setup
 
     protected:
@@ -47,7 +47,7 @@ class Board {
         struct History {
             Piece* oldPiece;
             Piece* newPiece;
-            Piece* takenPiece;
+            Piece* capturedPiece;
         };
 
         Piece*** board;
@@ -59,3 +59,27 @@ class Board {
 };
 
 #endif
+
+    // Piece* fromPiece = board[from.row][from.col];
+    // std::unique_ptr<Piece> capturedPiece = nullptr;
+    // if (nullptr != board[to.row][to.col]) {
+    //     capturedPiece = board[to.row][to.col]->clone();
+    // }
+
+    // if (nullptr == fromPiece) {
+    //     return false;
+    // }
+
+    // //move the piece
+    // delete board[to.row][to.col];
+    // board[from.row][from.col] = nullptr;
+    // board[to.row][to.col] = fromPiece;
+
+    // //is the board state still valid after the move? (cannot move into a check)
+    // bool valid = !isKingInCheck(fromPiece->getColour());
+
+    // //undo move and return
+    // board[to.row][to.col] = capturedPiece ? capturedPiece.release() : nullptr;
+    // board[from.row][from.col] = fromPiece;
+
+    // return valid;

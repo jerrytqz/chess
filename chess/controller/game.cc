@@ -93,24 +93,23 @@ void Game::setUp() { //this method interfaces with std::cout
 }
 
 void Game::play() {
-    gameInProgress = true;
-    while (gameInProgress) {
+    while (true) {
         notifyObservers();
+
+        bool hasEnded = false;
+
+        //make a move (DETECT RESIGN)
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
                 ++blackScore;
                 std::cout << "Black wins!\n";
-                gameInProgress = false;
-                notifyObservers();
-                return;
+                hasEnded = true;
             }
         } else {
             if (!blackPlayer->takeTurn()) {
                 ++whiteScore;
                 std::cout << "White wins!\n";
-                gameInProgress = false;
-                notifyObservers();
-                return;
+                hasEnded = true;
             }
         }
 
@@ -119,14 +118,20 @@ void Game::play() {
         board->computeBoardState(currentTurn);
         if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
             ++blackScore;
-            gameInProgress = false;
+            hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
             ++whiteScore;
-            gameInProgress = false;
+            hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::Stalemate) {
             whiteScore += 0.5;
             blackScore += 0.5;
-            gameInProgress = false;
+            hasEnded = true;
+        }
+
+        if (hasEnded) {
+            notifyObservers();
+            board->resetDefaultChess();
+            return;
         }
     }
 }
