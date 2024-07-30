@@ -436,6 +436,7 @@ void Board::resetDefaultChess() {
 }
 
 void Board::reset() {
+    boardState = BoardState::Default;
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
             if (board[i][j] != nullptr) {
