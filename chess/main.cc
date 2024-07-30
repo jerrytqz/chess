@@ -23,8 +23,16 @@ int main() {
     Observer* textObs = new TextObserver{&game};
 
     std::string command;
-    while (std::cout << "Please specify a command: " && std::cin >> command) {
-        if (command == "game") {
+    while (true) {
+        std::cout << "Please specify a command: ";
+        std::cin >> command;
+        if (std::cin.eof()) {
+            std::cout << "\nFINAL SCORES\n";
+            std::cout << "White: " << game.getWhiteScore() << "\n";
+            std::cout << "Black: " << game.getBlackScore() << "\n";
+            break;
+        }
+        else if (command == "game") {
             std::string whitePlayer, blackPlayer;
             std::cin >> whitePlayer >> blackPlayer;
             if (updateGamePlayer(game, Colour::White, whitePlayer) && updateGamePlayer(game, Colour::Black, blackPlayer)) {
@@ -38,6 +46,8 @@ int main() {
         else if (command == "setup") {
             game.setUp();
             std::cout << "Exiting setup mode.\n";
+        } else {
+            std::cout << "Invalid command.\n";
         }
     }
 

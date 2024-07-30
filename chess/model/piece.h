@@ -25,6 +25,7 @@ public:
     virtual ~Piece() = default;
 
     std::unique_ptr<Piece> clone();
+    Piece* cloneToBoard(Board* b);
 
     PieceType getPieceType() const;
     virtual char toChar() const = 0;
@@ -41,7 +42,7 @@ public:
 protected:
     Coordinate::Coordinate position;
     Colour colour;
-    Board* const board;
+    Board* board;
 
     virtual Piece* cloneImpl() = 0;
 private:

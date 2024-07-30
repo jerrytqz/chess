@@ -33,6 +33,8 @@ class Game {
         void detachObserver(Observer* obs);
         void attachObserver(Observer* obs);
         GameState getGameState();
+        float getWhiteScore() const;
+        float getBlackScore() const;
         void notifyObservers();
 
     protected:

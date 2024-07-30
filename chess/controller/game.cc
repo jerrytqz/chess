@@ -93,8 +93,7 @@ void Game::setUp() { //this method interfaces with std::cout
 }
 
 void Game::play() {
-    gameInProgress = true;
-    while (gameInProgress) {
+    while (true) {
         notifyObservers();
 
         bool hasEnded = false;
@@ -103,13 +102,13 @@ void Game::play() {
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
                 ++blackScore;
-                std::cout << "Black wins!\n";
+                std::cout << "White resigned. Black wins!\n";
                 hasEnded = true;
             }
         } else {
             if (!blackPlayer->takeTurn()) {
                 ++whiteScore;
-                std::cout << "White wins!\n";
+                std::cout << "Black resigned. White wins!\n";
                 hasEnded = true;
             }
         }
@@ -130,7 +129,6 @@ void Game::play() {
         }
 
         if (hasEnded) {
-            gameInProgress = false;
             notifyObservers();
             board->resetDefaultChess();
             return;
@@ -178,6 +176,14 @@ Game::GameState Game::getGameState() {
         board->cloneBoard(),
         board->getBoardState()
     };
+}
+
+float Game::getWhiteScore() const {
+    return whiteScore;
+}
+
+float Game::getBlackScore() const {
+    return blackScore;
 }
 
 void Game::notifyObservers() {

@@ -20,6 +20,21 @@ Board::Board(int boardDimension): board{new Piece**[boardDimension]}, boardDimen
     resetDefaultChess();
 }
 
+Board::Board(const Board& other): board{new Piece**[other.boardDimension]}, boardDimension{other.boardDimension}, boardState{other.boardState} {
+    //this is needed since C++ does not support 2D dynamic array initialization (e.g. new Piece*[boardDimension][boardDimension])
+    for (int i = 0; i < boardDimension; i++) { //initialize 2D array (rows) to nullptr
+        board[i] = new Piece*[boardDimension]{0};
+    }
+
+    for (int i = 0; i < other.boardDimension; ++i) {
+        for (int j = 0; j < other.boardDimension; ++j) {
+            if (other.board[i][j] != nullptr) {
+                board[i][j] = other.board[i][j]->cloneToBoard(this);
+            }
+        }
+    }
+}
+
 Board::~Board() {
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
