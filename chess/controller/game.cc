@@ -93,8 +93,7 @@ void Game::setUp() { //this method interfaces with std::cout
 }
 
 void Game::play() {
-    gameInProgress = true;
-    while (gameInProgress) {
+    while (true) {
         notifyObservers();
 
         bool hasEnded = false;
@@ -130,7 +129,6 @@ void Game::play() {
         }
 
         if (hasEnded) {
-            gameInProgress = false;
             notifyObservers();
             board->resetDefaultChess();
             return;
