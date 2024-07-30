@@ -56,7 +56,7 @@ Board::~Board() {
         History lastMove = moveHistories.top();
         delete lastMove.oldPiece;
         delete lastMove.newPiece;
-        delete lastMove.takenPiece;
+        delete lastMove.capturedPiece;
         moveHistories.pop();
     }
 }
@@ -179,7 +179,7 @@ void Board::computeBoardState(Colour turn) {
     }
 }
 
-bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col) {
+bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col, bool simulate) {
     // First step: is there a piece at the from coordinate and is it the correct colour?
     Piece* fromPiece = board[from.row][from.col];
     if (nullptr == fromPiece || fromPiece->getColour() != col) {
@@ -190,22 +190,20 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     std::unique_ptr<Piece> capturedPiece = board[to.row][to.col] ? board[to.row][to.col]->clone() : nullptr;
 
     // Second step: can the piece make the move?
-    if (!fromPiece->makeMove(to)) {
+    if (!fromPiece->makeMove(to, simulate)) {
         return false;
     }
-    if (nullptr != board[to.row][to.col]) { //delete captured piece
-        delete board[to.row][to.col];
-    }
-    board[to.row][to.col] = board[from.row][from.col];
-    board[from.row][from.col] = nullptr;
 
-    std::unique_ptr<Piece> newPiece = board[to.row][to.col]->clone();
+    delete board[to.row][to.col];
+    board[from.row][from.col] = nullptr;
+    board[to.row][to.col] = fromPiece;
+
+    std::unique_ptr<Piece> newPiece = fromPiece->clone();
 
     // Third step: add move to history
     moveHistories.push(
         History{oldPiece.release(), newPiece.release(), capturedPiece.release()}
     );
-
 
     // Fourth step: has player moved into check?
     if (isKingInCheck(col)) {
@@ -213,6 +211,9 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
         return false;
     }
 
+    if (simulate) {
+        undoTurn();
+    }
     return true;
 }
 
@@ -234,38 +235,11 @@ void Board::undoTurn() {
     board[oldPosition.row][oldPosition.col] = lastMove.oldPiece;
 
     //restore captured piece if there is one
-    if (nullptr != lastMove.takenPiece) {
-        board[lastMove.takenPiece->getPosition().row][lastMove.takenPiece->getPosition().col] = lastMove.takenPiece;
+    if (nullptr != lastMove.capturedPiece) {
+        board[lastMove.capturedPiece->getPosition().row][lastMove.capturedPiece->getPosition().col] = lastMove.capturedPiece;
     }
 
     moveHistories.pop();
-}
-
-//check to see if this move of Colour's piece will put Colour in check
-bool Board::verifyNoCheckAfterMove(Coordinate::Coordinate from, Coordinate::Coordinate to) {
-    Piece* fromPiece = board[from.row][from.col];
-    std::unique_ptr<Piece> capturedPiece = nullptr;
-    if (nullptr != board[to.row][to.col]) {
-        capturedPiece = board[to.row][to.col]->clone();
-    }
-
-    if (nullptr == fromPiece) {
-        return false;
-    }
-
-    //move the piece
-    delete board[to.row][to.col];
-    board[from.row][from.col] = nullptr;
-    board[to.row][to.col] = fromPiece;
-
-    //is the board state still valid after the move? (cannot move into a check)
-    bool valid = !isKingInCheck(fromPiece->getColour());
-
-    //undo move and return
-    board[to.row][to.col] = capturedPiece ? capturedPiece.release() : nullptr;
-    board[from.row][from.col] = fromPiece;
-
-    return valid;
 }
 
 // bool Board::promote(Coordinate pos, Piece::PieceType pieceType, Colour col) {
