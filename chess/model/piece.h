@@ -38,13 +38,13 @@ public:
     virtual bool canTargetSquare(Coordinate::Coordinate square) const; //uses virtual method getValidMoves()
     virtual bool canTargetSquareFrom(Coordinate::Coordinate from, Coordinate::Coordinate square); //uses virtual method canTargetSquare()
     bool makeMove(Coordinate::Coordinate dest, bool simulate = false);
-    virtual void adjustAfterMove(Coordinate::Coordinate dest);
 protected:
     Coordinate::Coordinate position;
     Colour colour;
     Board* board;
 
     virtual Piece* cloneImpl() = 0;
+    virtual void adjustAfterMove(Coordinate::Coordinate dest);
 private:
     PieceType pieceType;
 };

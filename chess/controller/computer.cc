@@ -13,10 +13,10 @@
 std::mt19937 ComputerPlayer::rng{std::random_device{}()};
 
 ComputerPlayer::ComputerPlayer(Board* board, Colour colour, int level)
-    : Player{board, colour}, level(level) {}
+    : Player{board, colour}, level{level} {}
 
 ComputerPlayer::ComputerPlayer(Board* board, Colour colour)
-    : Player{board, colour}, level(0) {
+    : Player{board, colour}, level{0} {
         std::cout << "Choose level for " << (colour == Colour::Black ? "black" : "white") << " AI opponent: ";
         while (level < 1 || level > 4)
         {
