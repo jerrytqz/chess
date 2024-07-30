@@ -33,6 +33,8 @@ class ComputerPlayer : public Player {
         bool levelTwo();
         bool levelThree();
         bool levelFour();
+        int minimax(Board *b, int depth, bool maximizing);
+        int evaluate(Board *b);
 };
 
 #endif

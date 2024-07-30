@@ -21,6 +21,7 @@ class Board {
         };
 
         Board(int boardDimension); //CTOR
+        Board(const Board& other); //COPY CTOR
         ~Board(); //DTOR
 
         void computeBoardState(Colour turn);

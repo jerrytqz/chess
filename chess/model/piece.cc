@@ -8,6 +8,12 @@ std::unique_ptr<Piece> Piece::clone() {
     return std::unique_ptr<Piece>(cloneImpl());
 }
 
+Piece* Piece::cloneToBoard(Board* b) {
+    Piece* c = cloneImpl();
+    c->board = b;
+    return c;
+}
+
 Piece::PieceType Piece::getPieceType() const {
     return pieceType;
 }
