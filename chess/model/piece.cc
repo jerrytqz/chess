@@ -41,9 +41,9 @@ bool Piece::canTargetSquare(Coordinate::Coordinate square) const {
 }
 
 bool Piece::canTargetSquareFrom(Coordinate::Coordinate from, Coordinate::Coordinate square) {
-    Coordinate::Coordinate og_pos = position;
+    Coordinate::Coordinate ogPos = position;
     position = from;
     bool canTarget = Piece::canTargetSquare(square);
-    position = og_pos;
+    position = ogPos;
     return canTarget;
 }
