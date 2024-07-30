@@ -96,37 +96,36 @@ void Game::play() {
     gameInProgress = true;
     while (gameInProgress) {
         notifyObservers();
+
+        //make a move
         if (currentTurn == Colour::White) {
-            if (!whitePlayer->takeTurn()) {
-                ++blackScore;
-                std::cout << "Black wins!\n";
-                gameInProgress = false;
-                notifyObservers();
-                return;
-            }
+            whitePlayer->takeTurn();
         } else {
-            if (!blackPlayer->takeTurn()) {
-                ++whiteScore;
-                std::cout << "White wins!\n";
-                gameInProgress = false;
-                notifyObservers();
-                return;
-            }
+            blackPlayer->takeTurn();
         }
 
         //next turn and recompute boardState
         currentTurn = currentTurn == Colour::White ? Colour::Black : Colour::White;
+        bool hasEnded = false;
         board->computeBoardState(currentTurn);
         if (board->getBoardState() == Board::BoardState::WhiteCheckmated) {
             ++blackScore;
             gameInProgress = false;
+            hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::BlackCheckmated) {
             ++whiteScore;
             gameInProgress = false;
+            hasEnded = true;
         } else if (board->getBoardState() == Board::BoardState::Stalemate) {
             whiteScore += 0.5;
             blackScore += 0.5;
             gameInProgress = false;
+            hasEnded = true;
+        }
+
+        if (hasEnded) {
+            notifyObservers();
+            return;
         }
     }
 }
