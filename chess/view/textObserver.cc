@@ -37,18 +37,18 @@ void TextObserver::notify() { //this method interfaces with std::cout
     std::cout << std::endl;
 
     if (gameState.boardState == Board::BoardState::WhiteChecked) {
-        std::cout << "White is in check.";
+        std::cout << "White is in check.\n";
     }
     else if (gameState.boardState == Board::BoardState::BlackChecked) {
-        std::cout << "Black is in check.";
+        std::cout << "Black is in check.\n";
     }
     else if (gameState.boardState == Board::BoardState::WhiteCheckmated) {
-        std::cout << "Checkmate! Black wins!";
+        std::cout << "Checkmate! Black wins!\n";
     }
     else if (gameState.boardState == Board::BoardState::BlackCheckmated) {
-        std::cout << "Checkmate! White wins!";
+        std::cout << "Checkmate! White wins!\n";
     }
     else if (gameState.boardState == Board::BoardState::Stalemate) {
-        std::cout << "Stalemate!";
+        std::cout << "Stalemate!\n";
     }
 }

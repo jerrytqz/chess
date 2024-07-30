@@ -215,7 +215,6 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     return true;
 }
 
-
 void Board::undoTurn() {
     if (moveHistories.empty()) {
         return;

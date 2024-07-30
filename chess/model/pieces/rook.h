@@ -9,6 +9,7 @@ private:
     bool hasMoved;
 public:
     static const char SYMBOL = 'R';
+    static const int VALUE = 5;
 
     Rook(Coordinate::Coordinate position, Colour colour, Board* board);
 

@@ -116,7 +116,7 @@ bool ComputerPlayer::levelTwo() {
             std::unique_ptr<Piece> enemy = board->getPiece(coord);
 
             int checkBonus = piece->canTargetSquareFrom(coord, enemyKingPos) ? 8 : 0;
-            int takePoints = enemy == nullptr ? 0 : enemy->getValue();
+            int takePoints = enemy == nullptr ? 0 : enemy->toValue();
 
             moves.push_back(ChessMove{piece->getPosition(), coord, checkBonus + takePoints});
         }

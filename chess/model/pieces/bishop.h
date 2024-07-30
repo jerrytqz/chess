@@ -9,6 +9,7 @@ private:
 
 public:
     static const char SYMBOL = 'B';
+    static const int VALUE = 3;
 
     Bishop(Coordinate::Coordinate position, Colour colour, Board* board);
 

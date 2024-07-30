@@ -9,6 +9,7 @@ private:
 
 public:
     static const char SYMBOL = 'N';
+    static const int VALUE = 3;
 
     Knight(Coordinate::Coordinate position, Colour colour, Board* board);
 
