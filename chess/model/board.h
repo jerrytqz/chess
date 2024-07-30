@@ -59,27 +59,3 @@ class Board {
 };
 
 #endif
-
-    // Piece* fromPiece = board[from.row][from.col];
-    // std::unique_ptr<Piece> capturedPiece = nullptr;
-    // if (nullptr != board[to.row][to.col]) {
-    //     capturedPiece = board[to.row][to.col]->clone();
-    // }
-
-    // if (nullptr == fromPiece) {
-    //     return false;
-    // }
-
-    // //move the piece
-    // delete board[to.row][to.col];
-    // board[from.row][from.col] = nullptr;
-    // board[to.row][to.col] = fromPiece;
-
-    // //is the board state still valid after the move? (cannot move into a check)
-    // bool valid = !isKingInCheck(fromPiece->getColour());
-
-    // //undo move and return
-    // board[to.row][to.col] = capturedPiece ? capturedPiece.release() : nullptr;
-    // board[from.row][from.col] = fromPiece;
-
-    // return valid;
