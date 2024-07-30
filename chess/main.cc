@@ -2,6 +2,7 @@
 #include "model/board.h"
 #include "controller/player.h"
 #include "view/textObserver.h"
+#include <limits>
 
 bool updateGamePlayer(Game& game, Colour colour, std::string player) {
     if (player == "human") {

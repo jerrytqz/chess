@@ -4,6 +4,7 @@
 #include "../model/board.h"
 #include "../shared/colour.h"
 #include "../shared/coordinate.h"
+#include <limits>
 
 HumanPlayer::HumanPlayer(Board* board, Colour colour) : Player{board, colour} {}
 
