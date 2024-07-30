@@ -76,6 +76,8 @@ void Game::setUp() { //this method interfaces with std::cout
             }
             else if (colour == "white") {
                 currentTurn = Colour::White;
+            } else {
+                std::cout << "Invalid colour.\n";
             }
         }
         else if (command == "done") {
@@ -88,6 +90,7 @@ void Game::setUp() { //this method interfaces with std::cout
             }
         } else {
             std::cout << "Invalid command.\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }

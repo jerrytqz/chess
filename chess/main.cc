@@ -5,7 +5,7 @@
 
 bool updateGamePlayer(Game& game, Colour colour, std::string player) {
     if (player == "human") {
-        game.updatePlayer(Colour::White, Player::PlayerType::Human);
+        game.updatePlayer(colour, Player::PlayerType::Human);
         return true;
     }
     else if (player.size() == 9 && player.substr(0, 8) == "computer" && player[8] >= '1' && player[8] <= '4') { //valid: e.g. "computer1"
@@ -48,6 +48,7 @@ int main() {
             std::cout << "Exiting setup mode.\n";
         } else {
             std::cout << "Invalid command.\n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 

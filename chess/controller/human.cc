@@ -39,6 +39,7 @@ bool HumanPlayer::takeTurn() {
         }
         else {
             std::cout << "Invalid action, try again: ";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
     }
 }
