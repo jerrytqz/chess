@@ -109,7 +109,7 @@ bool ComputerPlayer::levelTwo() {
 
         for (auto& coord : validMoves) {
             std::unique_ptr<Piece> enemy = board->getPiece(coord);
-            moves.push_back(ChessMove{piece->getPosition(), coord, (enemy == nullptr ? 0 : enemy->getValue())});
+            moves.push_back(ChessMove{piece->getPosition(), coord, (enemy == nullptr ? 0 : enemy->toValue())});
         }
     }
 

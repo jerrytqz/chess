@@ -9,6 +9,7 @@ private:
     bool hasMoved;
 public:
     static const char SYMBOL = 'K';
+    static const int VALUE = 1000;
 
     King(Coordinate::Coordinate position, Colour colour, Board* board);
 

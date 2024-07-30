@@ -9,6 +9,7 @@ private:
 
 public:
     static const char SYMBOL = 'Q';
+    static const int VALUE = 9;
 
     Queen(Coordinate::Coordinate position, Colour colour, Board* board);
 

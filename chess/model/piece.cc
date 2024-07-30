@@ -20,14 +20,6 @@ Colour Piece::getColour() const {
     return colour;
 }
 
-int Piece::getValue() const {
-    if (pieceType == Piece::PieceType::Queen) return 9;
-    if (pieceType == Piece::PieceType::Rook) return 5;
-    if (pieceType == Piece::PieceType::Bishop) return 3;
-    if (pieceType == Piece::PieceType::Knight) return 3;
-    if (pieceType == Piece::PieceType::Pawn) return 1;
-}
-
 std::vector<Coordinate::Coordinate> Piece::getValidLegalMoves() const {
     std::vector<Coordinate::Coordinate> validLegalMoves;
     for (Coordinate::Coordinate nextPos : getValidMoves()) {

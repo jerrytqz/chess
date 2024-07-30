@@ -16,6 +16,10 @@ public:
         }
     }
 
+    int toValue() const override {
+        return T::VALUE;
+    }   
+
     virtual ~PieceClonable() = 0;
 protected:
     Piece* cloneImpl() override {

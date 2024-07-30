@@ -10,6 +10,7 @@ private:
     bool justMovedTwice;
 public:
     static const char SYMBOL = 'P';
+    static const int VALUE = 1;
 
     Pawn(Coordinate::Coordinate position, Colour colour, Board* board);
 

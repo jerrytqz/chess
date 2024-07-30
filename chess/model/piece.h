@@ -28,9 +28,9 @@ public:
 
     PieceType getPieceType() const;
     virtual char toChar() const = 0;
+    virtual int toValue() const = 0;
     Coordinate::Coordinate getPosition() const;
     Colour getColour() const;
-    int getValue() const;
     
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const = 0; //does not check if move will put Colour in check
     std::vector<Coordinate::Coordinate> getValidLegalMoves() const; //uses virtual method getValidMoves()
