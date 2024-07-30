@@ -102,13 +102,13 @@ void Game::play() {
         if (currentTurn == Colour::White) {
             if (!whitePlayer->takeTurn()) {
                 ++blackScore;
-                std::cout << "Black wins!\n";
+                std::cout << "White resigned. Black wins!\n";
                 hasEnded = true;
             }
         } else {
             if (!blackPlayer->takeTurn()) {
                 ++whiteScore;
-                std::cout << "White wins!\n";
+                std::cout << "Black resigned. White wins!\n";
                 hasEnded = true;
             }
         }
@@ -176,6 +176,14 @@ Game::GameState Game::getGameState() {
         board->cloneBoard(),
         board->getBoardState()
     };
+}
+
+float Game::getWhiteScore() const {
+    return whiteScore;
+}
+
+float Game::getBlackScore() const {
+    return blackScore;
 }
 
 void Game::notifyObservers() {

@@ -34,7 +34,7 @@ bool HumanPlayer::takeTurn() {
             
             return true;
         }
-        else if (action == "resign") {
+        else if (action == "resign" || std::cin.eof()) {
             return false;
         }
         else {
