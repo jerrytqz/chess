@@ -26,10 +26,10 @@ int main() {
     while (true) {
         std::cout << "Please specify a command: ";
         std::cin >> command;
-        if (std::cin.eof()) {
+        if (std::cin.eof() || command == "quit") {
             std::cout << "\nFINAL SCORES\n";
             std::cout << "White: " << game.getWhiteScore() << "\n";
-            std::cout << "Black: " << game.getBlackScore() << "\n";
+            std::cout << "Black: " << game.getBlackScore() << "\n\n";
             break;
         }
         else if (command == "game") {

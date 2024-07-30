@@ -253,6 +253,8 @@ bool ComputerPlayer::levelFour() {
         testBoard->undoTurn();
     }
 
+    std::cout << "move " << Coordinate::cartesianToChess(maxMove.from) << " "
+        << Coordinate::cartesianToChess(maxMove.to) << std::endl;
     board->takeTurn(maxMove.from, maxMove.to, colour);
 
     delete testBoard;

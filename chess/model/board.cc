@@ -326,7 +326,7 @@ bool Board::removePiece(Coordinate::Coordinate pos) {
     return false;
 }
 
-bool Board::verifyBoard(Colour currentTurn) {
+bool Board::verifyBoard() {
     int numWhiteKing = 0, numBlackKing = 0;
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
@@ -362,6 +362,7 @@ bool Board::verifyBoard(Colour currentTurn) {
 
 void Board::resetDefaultChess() {
     //if board dimension is 8 initialize with default chessboard
+    reset();
     if (boardDimension == 8) {
         for (int j = 0; j < 8; j++) { //pawns
             addPiece(Colour::White, Piece::PieceType::Pawn, Coordinate::Coordinate{1, j});

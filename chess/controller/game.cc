@@ -79,7 +79,7 @@ void Game::setUp() { //this method interfaces with std::cout
             }
         }
         else if (command == "done") {
-            if (board->verifyBoard(currentTurn)) {
+            if (board->verifyBoard()) {
                 notifyObservers();
                 return;
             }
@@ -131,6 +131,7 @@ void Game::play() {
         if (hasEnded) {
             notifyObservers();
             board->resetDefaultChess();
+            currentTurn = Colour::White;
             return;
         }
     }

@@ -5,6 +5,7 @@ void TextObserver::notify() { //this method interfaces with std::cout
     Game::GameState gameState = game->getGameState();
 
     //print board
+    std::cout << std::endl;
     for (int i = 0; i < gameState.boardDimension; i++) {
         std::cout << 8 - i << " ";
         for (int j = 0; j < gameState.boardDimension; j++) {
@@ -34,7 +35,7 @@ void TextObserver::notify() { //this method interfaces with std::cout
     for (int i = 0; i < gameState.boardDimension; i++) {
         std::cout << static_cast<char>('a' + i);
     }
-    std::cout << std::endl;
+    std::cout << std::endl << std::endl;
 
     if (gameState.boardState == Board::BoardState::WhiteChecked) {
         std::cout << "White is in check.\n";
