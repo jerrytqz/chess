@@ -118,7 +118,7 @@ bool Board::isKingInCheck(Colour kingColour) const {
         for (int j = 0; j < boardDimension; ++j) {
             Piece* piece = board[i][j];
             if (piece && piece->getColour() == kingColour && piece->getPieceType() == Piece::PieceType::King) {
-                kingPos = piece->getPosition();
+                kingPos = {i, j};
                 break;
             }
         }
