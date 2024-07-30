@@ -177,23 +177,23 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
         return false;
     }
 
-    std::unique_ptr<Piece> oldPiece = fromPiece->clone();
+    std::unique_ptr<Piece> clonedFromPiece = fromPiece->clone();
     std::unique_ptr<Piece> capturedPiece = board[to.row][to.col] ? board[to.row][to.col]->clone() : nullptr;
 
     // Second step: can the piece make the move?
-    if (!fromPiece->makeMove(to, simulate)) {
+    if (!clonedFromPiece->makeMove(to, simulate)) {
         return false;
     }
 
     delete board[to.row][to.col];
     board[from.row][from.col] = nullptr;
-    board[to.row][to.col] = fromPiece;
+    board[to.row][to.col] = clonedFromPiece.release();
 
-    std::unique_ptr<Piece> newPiece = fromPiece->clone();
+    std::unique_ptr<Piece> newPiece = board[to.row][to.col]->clone();
 
     // Third step: add move to history
     moveHistories.push(
-        History{oldPiece.release(), newPiece.release(), capturedPiece.release()}
+        History{fromPiece, newPiece.release(), capturedPiece.release()}
     );
 
     // Fourth step: has player moved into check?
