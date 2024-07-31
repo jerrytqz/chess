@@ -40,11 +40,11 @@ bool Piece::makeMove(Coordinate::Coordinate dest, bool simulate) {
     return true;
 }
 
-void Piece::adjustAfterMove(Coordinate::Coordinate dest, bool simulate) {
+void Piece::adjustAfterMove(Coordinate::Coordinate, bool) {
     return;
 }
 
-int Piece::getMovementData() {
+int Piece::getMovementData() const {
     return 0;
 }
 

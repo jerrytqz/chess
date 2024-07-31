@@ -17,7 +17,7 @@ public:
 
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
     void adjustAfterMove(Coordinate::Coordinate dest, bool simulate = false) override;
-    int getMovementData() override;
+    int getMovementData() const override;
 };
 
 #endif
