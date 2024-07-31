@@ -73,7 +73,7 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
         }
     }
 
-    //CASTLING LOGIC
+    //CASTLING LOGIC (DOES NOT CHECK FOR CHECK)
     if (
         !hasMoved &&
         position.col == 4 &&
