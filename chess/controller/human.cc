@@ -82,6 +82,12 @@ bool HumanPlayer::takeTurn() {
         else if (action == "resign" || std::cin.eof()) {
             return false;
         }
+        else if (action == "undo") {
+            for (int i = 0; i < 3; i++)
+                board->undoTurn();
+
+            return true;
+        }
         else {
             std::cout << "Invalid action, try again: ";
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

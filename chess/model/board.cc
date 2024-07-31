@@ -226,9 +226,9 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     // Third step: add move to history
     if (enPassant) {
-        moveHistories.push(History{fromPiece, newPiece.release(), enPassantPiece.release(), turnNumber - (incrementTurn ? 0 : 1)});
+        moveHistories.push(History{fromPiece, newPiece.release(), enPassantPiece.release(), turnNumber});
     } else {
-        moveHistories.push(History{fromPiece, newPiece.release(), capturedPiece.release(), turnNumber - (incrementTurn ? 0 : 1)});
+        moveHistories.push(History{fromPiece, newPiece.release(), capturedPiece.release(), turnNumber});
     }
 
     // Fourth step: has player moved into check?
