@@ -19,6 +19,7 @@ public:
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
     bool canTargetSquare(Coordinate::Coordinate square) const override;
     void adjustAfterMove(Coordinate::Coordinate dest) override;
+    int getMovementData() const override;
 };
 
 #endif

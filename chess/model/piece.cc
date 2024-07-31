@@ -44,7 +44,7 @@ void Piece::adjustAfterMove(Coordinate::Coordinate) {
     return;
 }
 
-int Piece::getMovementData() {
+int Piece::getMovementData() const {
     return 0;
 }
 

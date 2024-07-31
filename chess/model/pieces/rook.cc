@@ -48,7 +48,7 @@ void Rook::adjustAfterMove(Coordinate::Coordinate) {
     hasMoved = true;
 }
 
-int Rook::getMovementData() {
+int Rook::getMovementData() const {
     if (hasMoved)
         return 1;
     return 0;
