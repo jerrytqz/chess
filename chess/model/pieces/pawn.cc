@@ -35,6 +35,27 @@ std::vector<Coordinate::Coordinate> Pawn::getValidMoves() const {
         validMoves.push_back(c4);
     }
 
+    // En passant
+    Coordinate::Coordinate leftAdjacent{position.row, position.col - 1};
+    Coordinate::Coordinate rightAdjacent{position.row, position.col + 1};
+
+    if (Coordinate::checkBounds(leftAdjacent, board->getBoardDimension())) {
+        std::unique_ptr<Piece> leftPiece = board->getPiece(leftAdjacent);
+        if (leftPiece && leftPiece->getColour() != colour && leftPiece->getPieceType() == Piece::PieceType::Pawn) {
+            if (leftPiece->getMovementData() == 1) {
+                validMoves.push_back(Coordinate::Coordinate{position.row + oneOffset, position.col - 1});
+            }
+        }
+    }
+    if (Coordinate::checkBounds(rightAdjacent, board->getBoardDimension())) {
+        std::unique_ptr<Piece> rightPiece = board->getPiece(rightAdjacent);
+        if (rightPiece && rightPiece->getColour() != colour && rightPiece->getPieceType() == Piece::PieceType::Pawn) {
+            if (rightPiece->getMovementData() == 1) {
+                validMoves.push_back(Coordinate::Coordinate{position.row + oneOffset, position.col + 1});
+            }
+        }
+    }
+
     return validMoves;
 }
 
@@ -53,4 +74,10 @@ bool Pawn::canTargetSquare(Coordinate::Coordinate square) const {
 void Pawn::adjustAfterMove(Coordinate::Coordinate dest, bool) {
     hasMoved = true;
     justMovedTwice = std::abs(dest.row - position.row) == 2;
+}
+
+int Pawn::getMovementData() const {
+    if (justMovedTwice)
+        return 1;
+    return 0;
 }

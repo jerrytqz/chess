@@ -201,22 +201,35 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     std::unique_ptr<Piece> clonedFromPiece = fromPiece->clone();
     std::unique_ptr<Piece> capturedPiece = board[to.row][to.col] ? board[to.row][to.col]->clone() : nullptr;
+    std::unique_ptr<Piece> enPassantPiece = board[from.row][to.col] ? board[from.row][to.col]->clone() : nullptr;
 
     // Second step: can the piece make the move?
     if (!clonedFromPiece->makeMove(to, simulate)) { //normal move
         return false;
     }
 
-    delete board[to.row][to.col];
+    // En passant check
+    bool enPassant = false;
+    if (clonedFromPiece->getPieceType() == Piece::PieceType::Pawn 
+        && to.col != from.col 
+        && board[to.row][to.col] == nullptr) {
+            delete board[from.row][to.col];
+            board[from.row][to.col] = nullptr;
+            enPassant = true;
+    } else {
+        delete board[to.row][to.col];
+    }
     board[from.row][from.col] = nullptr;
     board[to.row][to.col] = clonedFromPiece.release();
 
     std::unique_ptr<Piece> newPiece = board[to.row][to.col]->clone();
 
     // Third step: add move to history
-    moveHistories.push(
-        History{fromPiece, newPiece.release(), capturedPiece.release(), turnNumber - (incrementTurn ? 0 : 1)}
-    );
+    if (enPassant) {
+        moveHistories.push(History{fromPiece, newPiece.release(), enPassantPiece.release(), turnNumber - (incrementTurn ? 0 : 1)});
+    } else {
+        moveHistories.push(History{fromPiece, newPiece.release(), capturedPiece.release(), turnNumber - (incrementTurn ? 0 : 1)});
+    }
 
     // Fourth step: has player moved into check?
     if (isKingInCheck(col)) {
