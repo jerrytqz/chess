@@ -42,8 +42,7 @@ bool HumanPlayer::takeTurn() {
                 while (true) {
                     std::string type;
                     Piece::PieceType newPieceType;
-
-                    std::cout << "Promote to (r, n, b, q): ";
+                    
                     std::cin >> type;
 
                     if (type.size() != 1) {

@@ -79,11 +79,21 @@ bool ComputerPlayer::levelOne() {
 
         bool turnTaken = board->takeTurn(myPieces[randPiece]->getPosition(), validMoves[randMove], colour);
 
-        std::cout << "move " << Coordinate::cartesianToChess(myPieces[randPiece]->getPosition()) << " "
-            << Coordinate::cartesianToChess(validMoves[randMove]) << std::endl;
-
         if (turnTaken)
+        {
+            int promotionRow = colour == Colour::White ? 7 : 0;
+            if (myPieces[randPiece]->getPieceType() == Piece::PieceType::Pawn && validMoves[randMove].row == promotionRow) {
+                board->promote(validMoves[randMove], Piece::PieceType::Queen, colour);
+                std::cout << "move " << Coordinate::cartesianToChess(myPieces[randPiece]->getPosition()) << " "
+                    << Coordinate::cartesianToChess(validMoves[randMove]) << " Q" << std::endl;
+            }
+            else {
+                std::cout << "move " << Coordinate::cartesianToChess(myPieces[randPiece]->getPosition()) << " "
+                    << Coordinate::cartesianToChess(validMoves[randMove]) << std::endl;
+            }
+
             return true;
+        }
     }
 
     return false;
@@ -131,11 +141,20 @@ bool ComputerPlayer::levelTwo() {
     while (moves.size() > 0) {
         bool turnTaken = board->takeTurn(moves.back().from, moves.back().to, colour);
 
-        std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
-            << Coordinate::cartesianToChess(moves.back().to) << std::endl;
+        if (turnTaken) {
+            int promotionRow = colour == Colour::White ? 7 : 0;
+            if (board->getPiece(moves.back().to)->getPieceType() == Piece::PieceType::Pawn && moves.back().to.row == promotionRow) {
+                board->promote(moves.back().to, Piece::PieceType::Queen, colour);
+                std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
+                            << Coordinate::cartesianToChess(moves.back().to) << " Q" << std::endl;
+            }
+            else {
+                std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
+                            << Coordinate::cartesianToChess(moves.back().to) << std::endl;
+            }
 
-        if (turnTaken)
             return true;
+        }
 
         moves.pop_back();
     }
@@ -204,11 +223,20 @@ bool ComputerPlayer::levelThree() {
     while (moves.size() > 0) {
         bool turnTaken = board->takeTurn(moves.back().from, moves.back().to, colour);
 
-        std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
-            << Coordinate::cartesianToChess(moves.back().to) << std::endl;
+        if (turnTaken) {
+            int promotionRow = colour == Colour::White ? 7 : 0;
+            if (board->getPiece(moves.back().to)->getPieceType() == Piece::PieceType::Pawn && moves.back().to.row == promotionRow) {
+                board->promote(moves.back().to, Piece::PieceType::Queen, colour);
+                std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
+                            << Coordinate::cartesianToChess(moves.back().to) << " Q" << std::endl;
+            }
+            else {
+                std::cout << "move " << Coordinate::cartesianToChess(moves.back().from) << " "
+                            << Coordinate::cartesianToChess(moves.back().to) << std::endl;
+            }
 
-        if (turnTaken)
             return true;
+        }
 
         moves.pop_back();
     }
