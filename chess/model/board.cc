@@ -189,6 +189,10 @@ void Board::computeBoardState(Colour turn) {
 }
 
 bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Colour col, bool simulate, bool incrementTurn) {
+    if (incrementTurn) {
+        ++turnNumber;
+    }
+    
     // First step: is there a piece at the from coordinate and is it the correct colour?
     Piece* fromPiece = board[from.row][from.col];
     if (nullptr == fromPiece || fromPiece->getColour() != col) {
@@ -199,7 +203,7 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
     std::unique_ptr<Piece> capturedPiece = board[to.row][to.col] ? board[to.row][to.col]->clone() : nullptr;
 
     // Second step: can the piece make the move?
-    if (!clonedFromPiece->makeMove(to, simulate)) {
+    if (!clonedFromPiece->makeMove(to, simulate)) { //normal move
         return false;
     }
 
@@ -222,10 +226,6 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
 
     if (simulate) {
         undoTurn();
-    }
-
-    if (incrementTurn) {
-        ++turnNumber;
     }
 
     return true;

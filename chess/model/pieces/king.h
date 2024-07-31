@@ -15,8 +15,10 @@ public:
 
     ~King() = default;
 
+    std::vector<Coordinate::Coordinate> getValidLegalMoves() const override;
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    void adjustAfterMove(Coordinate::Coordinate dest) override;
+    bool canTargetSquare(Coordinate::Coordinate square) const;
+    void adjustAfterMove(Coordinate::Coordinate dest, bool simulate = false) override;
 };
 
 #endif

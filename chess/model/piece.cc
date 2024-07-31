@@ -34,13 +34,13 @@ bool Piece::makeMove(Coordinate::Coordinate dest, bool simulate) {
         }
     }
 
-    adjustAfterMove(dest);
+    adjustAfterMove(dest, simulate);
     position = dest;
 
     return true;
 }
 
-void Piece::adjustAfterMove(Coordinate::Coordinate) {
+void Piece::adjustAfterMove(Coordinate::Coordinate dest, bool simulate) {
     return;
 }
 

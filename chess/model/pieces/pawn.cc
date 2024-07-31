@@ -50,7 +50,7 @@ bool Pawn::canTargetSquare(Coordinate::Coordinate square) const {
     return false;
 }
 
-void Pawn::adjustAfterMove(Coordinate::Coordinate dest) {
+void Pawn::adjustAfterMove(Coordinate::Coordinate dest, bool simulate) {
     hasMoved = true;
     justMovedTwice = std::abs(dest.row - position.row) == 2;
 }
