@@ -2,6 +2,7 @@
 #include "model/board.h"
 #include "controller/player.h"
 #include "view/textObserver.h"
+#include "view/graphicalObserver.h"
 #include <limits>
 
 bool updateGamePlayer(Game& game, Colour colour, std::string player) {
@@ -22,6 +23,7 @@ int main() {
         Player::PlayerType::Human
     };
     Observer* textObs = new TextObserver{&game};
+    Observer* graphicalObs = new GraphicalObserver{&game};
 
     std::string command;
     while (true) {
@@ -54,6 +56,7 @@ int main() {
     }
 
     delete textObs;
+    delete graphicalObs;
     
     return 0;
 }

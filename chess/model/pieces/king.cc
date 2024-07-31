@@ -5,6 +5,45 @@
 King::King(Coordinate::Coordinate position, Colour colour, Board* board):
     PieceClonable{position, colour, Piece::PieceType::King, board}, hasMoved{false} {}
 
+std::vector<Coordinate::Coordinate> King::getValidLegalMoves() const {
+    std::vector<Coordinate::Coordinate> validLegalMoves;
+    for (Coordinate::Coordinate nextPos : getValidMoves()) {
+        if (abs(nextPos.col - position.col) > 1) { //castling move
+            bool checked = (colour == Colour::Black
+                ? (board->getBoardState() == Board::BoardState::BlackChecked)
+                : (board->getBoardState() == Board::BoardState::WhiteChecked));
+            if (checked) {
+                continue;
+            }
+            
+            bool validCastle = true;
+            if (nextPos.col == 2) { //QUEEN SIDE CASTLE
+                for (int i = 1; i < 4; ++i) {
+                    if (board->canTargetSquare({position.row, i}, colour == Colour::Black ? Colour::White : Colour::Black)) {
+                        validCastle = false;
+                        break;
+                    }
+                }
+            }
+            else { //KING SIDE CASTLE
+                for (int i = 5; i < 7; ++i) {
+                    if (board->canTargetSquare({position.row, i}, colour == Colour::Black ? Colour::White : Colour::Black)) {
+                        validCastle = false;
+                        break;
+                    }
+                }
+            }
+            if (validCastle) {
+                validLegalMoves.push_back(nextPos);
+            }
+        }
+        else if (board->takeTurn(position, nextPos, colour, true)) {
+            validLegalMoves.push_back(nextPos);
+        }
+    }
+    return validLegalMoves;
+}
+
 std::vector<Coordinate::Coordinate> King::getValidMoves() const {
     std::vector<Coordinate::Coordinate> validMoves;
 
@@ -34,24 +73,21 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
         }
     }
 
-    bool checked = colour == Colour::Black
-        ? (board->getBoardState() == Board::BoardState::BlackChecked)
-        : (board->getBoardState() == Board::BoardState::WhiteChecked);
-
+    //CASTLING LOGIC
     if (
-        !hasMoved && !checked &&
-        position.col == 5 &&
+        !hasMoved &&
+        position.col == 4 &&
         (position.row == 0 || position.row == 7)
     ) {
-        std::unique_ptr<Piece> col1 = board->getPiece(position.row, 0);
+        std::unique_ptr<Piece> queenSideRook = board->getPiece(position.row, 0);
         if (
-            col1 != nullptr &&
-            col1 ->getPieceType() == Piece::PieceType::Rook &&
-            col1 ->getColour() == colour &&
-            col1 ->getMovementData() == 0
+            queenSideRook != nullptr &&
+            queenSideRook->getPieceType() == Piece::PieceType::Rook &&
+            queenSideRook->getColour() == colour &&
+            queenSideRook->getMovementData() == 0
         ) {
             bool canReach = true;
-            for (int i = 1; i < position.col; ++i) {
+            for (int i = 1; i < 4; ++i) {
                 if (board->getPiece(position.row, i) != nullptr) {
                     canReach = false;
                     break;
@@ -63,16 +99,15 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
             }
         }
 
-        std::unique_ptr<Piece> col7 = board->getPiece(position.row, 7);
-
+        std::unique_ptr<Piece> kingSideRook = board->getPiece(position.row, 7);
         if (
-            col7 != nullptr &&
-            col7->getPieceType() == Piece::PieceType::Rook &&
-            col7 ->getColour() == colour &&
-            col7->getMovementData() == 0
+            kingSideRook != nullptr &&
+            kingSideRook->getPieceType() == Piece::PieceType::Rook &&
+            kingSideRook ->getColour() == colour &&
+            kingSideRook->getMovementData() == 0
         ) {
             bool canReach = true;
-            for (int i = 1; i < position.col; ++i) {
+            for (int i = 5; i < 7; ++i) {
                 if (board->getPiece(position.row, i) != nullptr) {
                     canReach = false;
                     break;
@@ -88,34 +123,47 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
     return validMoves;
 }
 
-void King::adjustAfterMove(Coordinate::Coordinate dest) {
+bool King::canTargetSquare(Coordinate::Coordinate square) const {
+    if (abs(square.col - position.col) > 1) { //can not target pieces greater than 1 away
+        return false;
+    }
+    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+void King::adjustAfterMove(Coordinate::Coordinate dest, bool simulate) {
     bool checked = colour == Colour::Black
         ? (board->getBoardState() == Board::BoardState::BlackChecked)
         : (board->getBoardState() == Board::BoardState::WhiteChecked);
     if (
         !hasMoved && !checked &&
-        position.col == 5 &&
+        position.col == 4 &&
         (position.row == 0 || position.row == 7)
     ) {
-        std::unique_ptr<Piece> col1 = board->getPiece(position.row, 0);
-        std::unique_ptr<Piece> col7 = board->getPiece(position.row, 7);
-        if (
+        std::unique_ptr<Piece> queenSideRook = board->getPiece(position.row, 0);
+        std::unique_ptr<Piece> kingSideRook = board->getPiece(position.row, 7);
+        if ( //queen side castle
             dest == Coordinate::Coordinate{position.row, 2} &&
-            col1 != nullptr &&
-            col1 ->getPieceType() == Piece::PieceType::Rook &&
-            col1 ->getColour() == colour &&
-            col1 ->getMovementData() == 0
+            queenSideRook != nullptr &&
+            queenSideRook->getPieceType() == Piece::PieceType::Rook &&
+            queenSideRook->getColour() == colour &&
+            queenSideRook->getMovementData() == 0
         ) {
-            board->takeTurn(col1->getPosition(), Coordinate::Coordinate{position.row, 3}, colour, false);
+            board->takeTurn(queenSideRook->getPosition(), Coordinate::Coordinate{position.row, 3}, colour, simulate, false);
         }
-        else if (
+        else if ( //king side castle
             dest == Coordinate::Coordinate{position.row, 6} &&
-            col7 != nullptr &&
-            col7 ->getPieceType() == Piece::PieceType::Rook &&
-            col7 ->getColour() == colour &&
-            col7 ->getMovementData() == 0
+            kingSideRook != nullptr &&
+            kingSideRook->getPieceType() == Piece::PieceType::Rook &&
+            kingSideRook->getColour() == colour &&
+            kingSideRook->getMovementData() == 0
         ) {
-            board->takeTurn(col7->getPosition(), Coordinate::Coordinate{position.row, 5}, colour, false);
+            board->takeTurn(kingSideRook->getPosition(), Coordinate::Coordinate{position.row, 5}, colour, simulate, false);
         }
     }
     

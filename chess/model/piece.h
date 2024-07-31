@@ -34,10 +34,10 @@ public:
     Colour getColour() const;
     
     virtual std::vector<Coordinate::Coordinate> getValidMoves() const = 0; //does not check if move will put Colour in check
-    std::vector<Coordinate::Coordinate> getValidLegalMoves() const; //uses virtual method getValidMoves()
+    virtual std::vector<Coordinate::Coordinate> getValidLegalMoves() const; //uses virtual method getValidMoves()
     virtual bool canTargetSquare(Coordinate::Coordinate square) const; //uses virtual method getValidMoves()
     virtual bool canTargetSquareFrom(Coordinate::Coordinate from, Coordinate::Coordinate square); //uses virtual method canTargetSquare()
-    virtual int getMovementData();
+    virtual int getMovementData() const;
     bool makeMove(Coordinate::Coordinate dest, bool simulate = false);
 protected:
     Coordinate::Coordinate position;
@@ -45,7 +45,7 @@ protected:
     Board* board;
 
     virtual Piece* cloneImpl() = 0;
-    virtual void adjustAfterMove(Coordinate::Coordinate dest);
+    virtual void adjustAfterMove(Coordinate::Coordinate dest, bool simulate = false);
 private:
     PieceType pieceType;
 };

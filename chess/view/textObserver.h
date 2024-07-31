@@ -5,7 +5,7 @@
 
 class TextObserver : public Observer {
     public:
-        TextObserver(Game* game): Observer{game} {};
+        TextObserver(Game* game);
         ~TextObserver() = default;
         void notify() override final;
 

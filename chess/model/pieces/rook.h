@@ -16,8 +16,8 @@ public:
     ~Rook() = default;
 
     std::vector<Coordinate::Coordinate> getValidMoves() const override;
-    void adjustAfterMove(Coordinate::Coordinate dest) override;
-    int getMovementData() override;
+    void adjustAfterMove(Coordinate::Coordinate dest, bool simulate = false) override;
+    int getMovementData() const override;
 };
 
 #endif

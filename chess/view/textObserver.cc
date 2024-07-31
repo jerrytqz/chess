@@ -1,6 +1,8 @@
 #include "textObserver.h"
 #include <iostream>
 
+TextObserver::TextObserver(Game* game): Observer{game} {}
+
 void TextObserver::notify() { //this method interfaces with std::cout
     Game::GameState gameState = game->getGameState();
 
