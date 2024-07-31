@@ -81,3 +81,7 @@ int Pawn::getMovementData() const {
         return 1;
     return 0;
 }
+
+void Pawn::falsifyJustMovedTwice() {
+    justMovedTwice = false;
+}

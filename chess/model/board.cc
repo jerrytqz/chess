@@ -123,17 +123,21 @@ void Board::computeBoardState(Colour turn) {
     bool whiteInCheck = isKingInCheck(Colour::White);
     bool blackInCheck = isKingInCheck(Colour::Black);
 
-    //check if the only pieces on the board are 2 kings
+    //check if the only pieces on the board are 2 kings and set justMovedTwice to false for all pawns of colour turn
     bool justKings = true;
     for (int i = 0; i < boardDimension; i++) {
         for (int j = 0; j < boardDimension; j++) {
-            if (board[i][j] && board[i][j]->getPieceType() != Piece::PieceType::King) {
-                justKings = false;
-                break;
+            if (board[i][j]) {
+                if (board[i][j]->getPieceType() != Piece::PieceType::King) {
+                    justKings = false;
+                }
+                if (board[i][j]->getPieceType() == Piece::PieceType::Pawn && board[i][j]->getColour() == turn) {
+                    Pawn* pawn = dynamic_cast<Pawn*>(board[i][j]);
+                    if (pawn) {
+                        pawn->falsifyJustMovedTwice();
+                    }
+                }
             }
-        }
-        if (!justKings) {
-            break;
         }
     }
     if (justKings) {

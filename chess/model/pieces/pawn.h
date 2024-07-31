@@ -20,6 +20,7 @@ public:
     bool canTargetSquare(Coordinate::Coordinate square) const override;
     void adjustAfterMove(Coordinate::Coordinate dest, bool simulate = false) override;
     int getMovementData() const override;
+    void falsifyJustMovedTwice();
 };
 
 #endif

@@ -15,9 +15,9 @@ void GraphicalObserver::notify() {
             bool isEvenFile = (j % 2 == 0);
 
             if ((isEvenRank && isEvenFile) || (!isEvenRank && !isEvenFile)) {
-                window->fillRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, Xwindow::Brown);
-            } else {
                 window->fillRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, Xwindow::Orange);
+            } else {
+                window->fillRectangle(j * SQUARE_SIZE, i * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, Xwindow::Brown);
             }
             if (gameState.board[gameState.boardDimension - 1 - i][j] != nullptr) { //piece exists
                 // window->fillRectangle(j * SQUARE_SIZE + SQUARE_SIZE / 4, i * SQUARE_SIZE + SQUARE_SIZE / 4, SQUARE_SIZE / 2, SQUARE_SIZE / 2, Xwindow::White);
