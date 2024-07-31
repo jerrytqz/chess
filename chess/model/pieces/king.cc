@@ -12,6 +12,10 @@ std::vector<Coordinate::Coordinate> King::getValidLegalMoves() const {
             bool checked = (colour == Colour::Black
                 ? (board->getBoardState() == Board::BoardState::BlackChecked)
                 : (board->getBoardState() == Board::BoardState::WhiteChecked));
+            if (checked) {
+                continue;
+            }
+            
             bool validCastle = true;
             if (nextPos.col == 2) { //QUEEN SIDE CASTLE
                 for (int i = 1; i < 4; ++i) {
@@ -120,16 +124,15 @@ std::vector<Coordinate::Coordinate> King::getValidMoves() const {
 }
 
 bool King::canTargetSquare(Coordinate::Coordinate square) const {
-    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
-    auto whereIsIt = std::find(validMoves.begin(), validMoves.end(), square);
-    if (whereIsIt == validMoves.end()) { //square is not in valid moves
+    if (abs(square.col - position.col) > 1) { //can not target pieces greater than 1 away
         return false;
     }
-    else if (abs((*whereIsIt).col - position.col) == 1) { //not a castling move
-        return true;
+    std::vector<Coordinate::Coordinate> validMoves = getValidMoves();
+    if (std::find(validMoves.begin(), validMoves.end(), square) == validMoves.end()) { //square is not in valid moves
+        return false;
     }
     else {
-        return false;
+        return true;
     }
 }
 
