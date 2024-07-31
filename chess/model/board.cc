@@ -210,6 +210,7 @@ bool Board::takeTurn(Coordinate::Coordinate from, Coordinate::Coordinate to, Col
         && to.col != from.col 
         && board[to.row][to.col] == nullptr) {
             delete board[from.row][to.col];
+            board[from.row][to.col] = nullptr;
             enPassant = true;
     } else {
         delete board[to.row][to.col];
