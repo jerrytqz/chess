@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cctype>
+
 #include "human.h"
 #include "../model/board.h"
 #include "../shared/colour.h"
@@ -41,37 +43,38 @@ bool HumanPlayer::takeTurn() {
                     std::string type;
                     Piece::PieceType newPieceType;
 
+                    std::cout << "Promote to (r, n, b, q): ";
                     std::cin >> type;
 
                     if (type.size() != 1) {
-                        std::cout << "invalid pormotion, try again" << std::endl;
+                        std::cout << "Invalid promotion, try again." << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         continue;
                     }
+                    char c = std::tolower(type[0]);
 
-                    if (type[0] >= 'A')
-                        type[0] = type[0] - 'A' + 'a';
-
-                    if (type[0] == 'r') {
+                    if (c == 'r') {
                         newPieceType = Piece::PieceType::Rook;
                     }
-                    else if (type[0] == 'n') {
+                    else if (c == 'n') {
                         newPieceType = Piece::PieceType::Knight;
                     }
-                    else if (type[0] == 'b') {
+                    else if (c == 'b') {
                         newPieceType = Piece::PieceType::Bishop;
                     }
-                    else if (type[0] == 'q') {
+                    else if (c == 'q') {
                         newPieceType = Piece::PieceType::Queen;
                     }
                     else {
-                        std::cout << "invalid pormotion, try again" << std::endl;
+                        std::cout << "Invalid promotion, try again." << std::endl;
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         continue;
                     }
 
                     if (board->promote(Coordinate::chessToCartesian(to), newPieceType, colour))
                         break;
                     else
-                        std::cout << "invalid pormotion, try again" << std::endl;
+                        std::cout << "Invalid promotion, try again." << std::endl;
                 }
             }
             

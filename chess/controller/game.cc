@@ -79,6 +79,7 @@ void Game::setUp() { //this method interfaces with std::cout
             } else {
                 std::cout << "Invalid colour.\n";
             }
+            notifyObservers();
         }
         else if (command == "done") {
             if (board->verifyBoard()) {
