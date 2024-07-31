@@ -165,7 +165,7 @@ bool ComputerPlayer::levelThree() {
         }
     }
 
-    bool* dangerZones = new bool[board->getBoardDimension() * board->getBoardDimension()]{0};
+    std::vector<bool> dangerZones = std::vector<bool>(board->getBoardDimension() * board->getBoardDimension());
 
     for (auto& enemy : enemyPieces) {
         std::vector<Coordinate::Coordinate> enemyMoves = enemy->getValidLegalMoves();
@@ -212,8 +212,6 @@ bool ComputerPlayer::levelThree() {
 
         moves.pop_back();
     }
-
-    delete[] dangerZones;
 
     return false;
 }
